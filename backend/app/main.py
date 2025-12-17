@@ -42,7 +42,10 @@ async def lifespan(app: FastAPI):
     print("  • GET  /api/ocr/results/{id}/download/json")
     print("  • GET  /api/ocr/results/{id}/download/csv")
     print("  • GET  /api/ocr/results/{id}/download/txt")
-    print("\n👤 Utilisateur démo: demo / demo123")
+    print("\n👤 Utilisateurs par défaut disponibles :")
+    print("  • admin / Admin123!   (email: admin@ocri.com)")
+    print("  • user / User123!     (email: user@ocri.com)")
+    print("  • testeur / Test123!  (email: test@ocri.com)")
     print("="*60 + "\n")
     
     yield

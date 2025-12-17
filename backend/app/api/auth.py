@@ -72,33 +72,67 @@ def get_user_by_email(db: Session, email: str) -> Optional[UserModel]:
     return db.query(UserModel).filter(UserModel.email == email).first()
 
 
-def init_demo_user():
+def init_default_users():
     """
-    Crée l'utilisateur de démonstration dans la base de données s'il n'existe pas.
+    Crée les utilisateurs par défaut dans la base de données s'ils n'existent pas
+    et supprime l'ancien utilisateur 'demo' si présent.
     """
     # S'assurer que les tables existent
     init_db()
 
     db = SessionLocal()
     try:
+        # Supprimer l'ancien utilisateur de démo s'il existe encore
         demo = db.query(UserModel).filter(UserModel.username == "demo").first()
-        if not demo:
-            demo_user = UserModel(
-                email="demo@ocr.com",
-                username="demo",
-                full_name="Utilisateur Démo",
-                hashed_password=get_password_hash("demo123"),
-                is_active=True,
-                is_superuser=False,
-            )
-            db.add(demo_user)
+        if demo:
+            db.delete(demo)
             db.commit()
+
+        default_users = [
+            {
+                "email": "admin@ocri.com",
+                "username": "admin",
+                "full_name": "Administrateur OCR Intelligent",
+                "password": "Admin123!",
+                "is_superuser": True,
+            },
+            {
+                "email": "user@ocri.com",
+                "username": "user",
+                "full_name": "Utilisateur OCR",
+                "password": "User123!",
+                "is_superuser": False,
+            },
+            {
+                "email": "test@ocri.com",
+                "username": "testeur",
+                "full_name": "Utilisateur de Test OCR",
+                "password": "Test123!",
+                "is_superuser": False,
+            },
+        ]
+
+        for u in default_users:
+            existing = db.query(UserModel).filter(
+                (UserModel.username == u["username"]) | (UserModel.email == u["email"])
+            ).first()
+            if not existing:
+                user = UserModel(
+                    email=u["email"],
+                    username=u["username"],
+                    full_name=u["full_name"],
+                    hashed_password=get_password_hash(u["password"]),
+                    is_active=True,
+                    is_superuser=u["is_superuser"],
+                )
+                db.add(user)
+        db.commit()
     finally:
         db.close()
 
 
-# Initialisation de l'utilisateur démo au chargement du module
-init_demo_user()
+# Initialisation des utilisateurs par défaut au chargement du module
+init_default_users()
 
 @router.post("/register", response_model=User)
 async def register(user_data: UserCreate, db: Session = Depends(get_db)):

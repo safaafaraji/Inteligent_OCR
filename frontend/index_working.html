@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Intelligent - Traitement de documents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .drop-zone {
+            border: 3px dashed #3b82f6;
+            transition: all 0.3s ease;
+        }
+        .drop-zone.dragover {
+            border-color: #10b981;
+            background-color: #f0f9ff;
+        }
+        .entity-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <i class="fas fa-file-alt text-2xl text-blue-600 mr-3"></i>
+                    <h1 class="text-xl font-bold">OCR Intelligent</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="userStatus" class="text-sm text-gray-600 hidden">
+                        Connecté en tant que <span id="username" class="font-medium text-blue-600"></span>
+                    </span>
+                    <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Connexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Traitement OCR Intelligent
+            </h1>
+            <p class="text-xl text-gray-600">
+                Extrayez automatiquement les informations de vos documents scannés
+            </p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-upload mr-2 text-blue-600"></i>Télécharger un document
+            </h2>
+            
+            <div id="dropZone" class="drop-zone rounded-xl p-12 text-center cursor-pointer mb-6">
+                <input type="file" id="fileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif">
+                
+                <i class="fas fa-cloud-upload-alt text-5xl text-blue-500 mb-4"></i>
+                <p class="text-xl font-semibold text-gray-700 mb-2">Glissez-déposez votre fichier</p>
+                <p class="text-gray-600">ou cliquez pour sélectionner</p>
+                <p class="text-sm text-gray-500 mt-4">PDF, JPG, PNG, TIFF - max 10MB</p>
+            </div>
+            
+            <div id="fileInfo" class="hidden mb-6 p-4 bg-blue-50 rounded-lg">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium" id="fileName"></p>
+                        <p class="text-sm text-gray-600" id="fileSize"></p>
+                    </div>
+                    <button onclick="removeFile()" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Options -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-3">
+                    <i class="fas fa-cog mr-2"></i>Options de traitement
+                </label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <select id="languageSelect" class="w-full border rounded-lg p-2">
+                            <option value="fra+eng">Français + Anglais</option>
+                            <option value="fra">Français</option>
+                            <option value="eng">Anglais</option>
+                            <option value="spa">Espagnol</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="documentType" class="w-full border rounded-lg p-2">
+                            <option value="auto">Détection automatique</option>
+                            <option value="invoice">Facture</option>
+                            <option value="cv">CV</option>
+                            <option value="contract">Contrat</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex space-x-4">
+                <button onclick="clearFile()" class="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-trash mr-2"></i>Effacer
+                </button>
+                <button id="processBtn" disabled 
+                        class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-3 rounded-lg hover:opacity-90 disabled:opacity-50">
+                    <i class="fas fa-bolt mr-2"></i>Traiter le document
+                </button>
+            </div>
+        </div>
+        
+        <!-- Results -->
+        <div id="resultsSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-chart-bar mr-2 text-blue-600"></i>Résultats
+                </h2>
+                
+                <div id="loading" class="hidden text-center py-8">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                    <p class="mt-4 text-gray-600">Traitement en cours...</p>
+                </div>
+                
+                <div id="resultsContent"></div>
+                
+                <div id="error" class="hidden text-center py-8 text-red-600">
+                    <i class="fas fa-exclamation-triangle text-3xl mb-4"></i>
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="min-h-screen flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl">
+                <div class="flex justify-between items-center p-6 border-b">
+                    <h3 class="text-xl font-bold" id="modalTitle"></h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="p-6 max-h-[70vh] overflow-y-auto">
+                    <div id="modalContent"></div>
+                </div>
+                <div class="p-6 border-t bg-gray-50 rounded-b-xl">
+                    <button onclick="closeModal()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                        Fermer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentFile = null;
+        let currentResults = null;
+        let authToken = null;
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragAndDrop();
+            checkAuth();
+        });
+        
+        // Configuration drag & drop
+        function setupDragAndDrop() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                handleFile(e.dataTransfer.files[0]);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+            
+            // Process button
+            document.getElementById('processBtn').addEventListener('click', processDocument);
+        }
+        
+        // Gestion des fichiers
+        function handleFile(file) {
+            // Validation
+            const allowedTypes = [
+                'application/pdf',
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+                'image/tiff',
+                'image/tif'
+            ];
+            
+            const allowedExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.tiff', '.tif'];
+            const extension = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(extension)) {
+                showError('Format de fichier non supporté');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                showError('Fichier trop volumineux (max 10MB)');
+                return;
+            }
+            
+            currentFile = file;
+            
+            // Afficher les infos
+            document.getElementById('fileInfo').classList.remove('hidden');
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            
+            // Activer le bouton
+            document.getElementById('processBtn').disabled = false;
+        }
+        
+        function removeFile() {
+            currentFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('processBtn').disabled = true;
+        }
+        
+        function clearFile() {
+            removeFile();
+        }
+        
+        // Authentification
+        async function checkAuth() {
+            try {
+                // Essayer de se connecter automatiquement avec le compte demo
+                const response = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'demo',
+                        password: 'demo123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.access_token;
+                    localStorage.setItem('ocr_token', authToken);
+                    
+                    // Mettre à jour l'interface
+                    document.getElementById('userStatus').classList.remove('hidden');
+                    document.getElementById('username').textContent = 'demo';
+                    document.getElementById('loginBtn').textContent = 'Déconnexion';
+                    document.getElementById('loginBtn').onclick = logout;
+                    
+                    showMessage('success', 'Connecté avec le compte démo');
+                }
+            } catch (error) {
+                console.log('Auto-login failed');
+            }
+        }
+        
+        async function login() {
+            const username = prompt('Nom d\'utilisateur:');
+            const password = prompt('Mot de passe:');
+            
+            if (!username || !password) return;
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.access_token;
+                    localStorage.setItem('ocr_token', authToken);
+                    
+                    document.getElementById('userStatus').classList.remove('hidden');
+                    document.getElementById('username').textContent = username;
+                    document.getElementById('loginBtn').textContent = 'Déconnexion';
+                    document.getElementById('loginBtn').onclick = logout;
+                    
+                    showMessage('success', 'Connexion réussie');
+                } else {
+                    showMessage('error', 'Échec de la connexion');
+                }
+            } catch (error) {
+                showMessage('error', 'Erreur de connexion');
+            }
+        }
+        
+        function logout() {
+            authToken = null;
+            localStorage.removeItem('ocr_token');
+            document.getElementById('userStatus').classList.add('hidden');
+            document.getElementById('loginBtn').textContent = 'Connexion';
+            document.getElementById('loginBtn').onclick = login;
+            showMessage('info', 'Déconnecté');
+        }
+        
+        // Traitement du document
+        async function processDocument() {
+            if (!currentFile) {
+                showMessage('error', 'Veuillez sélectionner un fichier');
+                return;
+            }
+            
+            if (!authToken) {
+                showMessage('error', 'Veuillez vous connecter d\'abord');
+                return;
+            }
+            
+            // Afficher le loader
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('resultsContent').innerHTML = '';
+            document.getElementById('error').classList.add('hidden');
+            
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            formData.append('language', document.getElementById('languageSelect').value);
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/ocr/process', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Erreur de traitement');
+                }
+                
+                const result = await response.json();
+                
+                // Récupérer les résultats complets
+                const fullResults = await fetch(`http://localhost:8000/api/ocr/results/${result.process_id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (!fullResults.ok) {
+                    throw new Error('Erreur lors de la récupération des résultats');
+                }
+                
+                currentResults = await fullResults.json();
+                displayResults(currentResults);
+                
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+        
+        // Affichage des résultats
+        function displayResults(result) {
+            const content = document.getElementById('resultsContent');
+            
+            const personalInfo = result.structured_data?.personal_info || {};
+            const entities = result.structured_data?.entities || {};
+            
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <!-- En-tête -->
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-600 text-2xl mr-3"></i>
+                            <div>
+                                <h3 class="font-bold text-green-800">Document traité avec succès!</h3>
+                                <p class="text-green-600">${result.filename}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations principales -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500">Type de document</p>
+                            <p class="text-lg font-bold">${result.document_type || 'Inconnu'}</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500">Confiance OCR</p>
+                            <p class="text-lg font-bold">${(result.average_confidence * 100).toFixed(1)}%</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500">Pages</p>
+                            <p class="text-lg font-bold">${result.total_pages}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations personnelles -->
+                    ${personalInfo.full_name || personalInfo.email || personalInfo.phone ? `
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-bold mb-3 text-blue-700">
+                                <i class="fas fa-user-circle mr-2"></i>Informations personnelles
+                            </h4>
+                            <div class="space-y-2">
+                                ${personalInfo.full_name ? `
+                                    <div class="flex items-center">
+                                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mr-3">
+                                            <i class="fas fa-user mr-1"></i>Nom
+                                        </span>
+                                        <span class="font-medium">${personalInfo.full_name}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${personalInfo.email ? `
+                                    <div class="flex items-center">
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm mr-3">
+                                            <i class="fas fa-envelope mr-1"></i>Email
+                                        </span>
+                                        <span class="font-medium">${personalInfo.email}</span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${personalInfo.phone ? `
+                                    <div class="flex items-center">
+                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm mr-3">
+                                            <i class="fas fa-phone mr-1"></i>Téléphone
+                                        </span>
+                                        <span class="font-medium">${personalInfo.phone}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Données extraites -->
+                    ${Object.keys(entities).length > 0 ? `
+                        <div class="border rounded-lg p-4">
+                            <h4 class="font-bold mb-3 text-green-700">
+                                <i class="fas fa-database mr-2"></i>Données structurées
+                            </h4>
+                            <div class="space-y-3">
+                                ${Object.entries(entities).map(([key, values]) => `
+                                    <div>
+                                        <p class="font-medium text-gray-700 mb-1">${key}:</p>
+                                        ${Array.isArray(values) ? values.map(val => `
+                                            <div class="text-sm bg-gray-50 p-2 rounded mb-1">${val}</div>
+                                        `).join('') : `<div class="text-sm">${values}</div>`}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Texte extrait -->
+                    <div class="border rounded-lg p-4">
+                        <h4 class="font-bold mb-3 text-gray-700">
+                            <i class="fas fa-file-alt mr-2"></i>Texte extrait
+                        </h4>
+                        <div class="bg-gray-50 p-4 rounded max-h-60 overflow-y-auto">
+                            <pre class="text-sm whitespace-pre-wrap">${result.text?.substring(0, 500) || 'Aucun texte extrait'}${result.text?.length > 500 ? '...' : ''}</pre>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="flex space-x-4">
+                        <button onclick="downloadResult('json')" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                            <i class="fas fa-download mr-2"></i>Télécharger JSON
+                        </button>
+                        <button onclick="downloadResult('csv')" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                            <i class="fas fa-file-csv mr-2"></i>Télécharger CSV
+                        </button>
+                        <button onclick="showFullText()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
+                            <i class="fas fa-eye mr-2"></i>Voir le texte complet
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Téléchargement
+        async function downloadResult(format) {
+            if (!currentResults?.process_id) {
+                showMessage('error', 'Aucun résultat à télécharger');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:8000/api/ocr/results/${currentResults.process_id}/download/${format}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erreur de téléchargement');
+                }
+                
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ocr_${currentResults.filename}_${Date.now()}.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                showMessage('success', `Fichier ${format} téléchargé`);
+                
+            } catch (error) {
+                showMessage('error', 'Échec du téléchargement');
+            }
+        }
+        
+        // Affichage du texte complet
+        function showFullText() {
+            if (!currentResults?.text) {
+                showMessage('error', 'Aucun texte à afficher');
+                return;
+            }
+            
+            document.getElementById('modalTitle').textContent = 'Texte extrait complet';
+            document.getElementById('modalContent').innerHTML = `
+                <div class="bg-gray-50 p-4 rounded max-h-96 overflow-y-auto">
+                    <pre class="text-sm whitespace-pre-wrap">${currentResults.text}</pre>
+                </div>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+        }
+        
+        // Utilitaires
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function showMessage(type, message) {
+            const colors = {
+                success: 'bg-green-100 text-green-800 border-green-200',
+                error: 'bg-red-100 text-red-800 border-red-200',
+                info: 'bg-blue-100 text-blue-800 border-blue-200',
+                warning: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+            };
+            
+            const div = document.createElement('div');
+            div.className = `fixed top-4 right-4 p-4 rounded-lg border ${colors[type]} shadow-lg z-50 max-w-sm`;
+            div.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(div);
+            
+            setTimeout(() => {
+                if (div.parentNode) {
+                    div.remove();
+                }
+            }, 3000);
+        }
+        
+        function showError(message) {
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = message;
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+        
+        // Initialiser le bouton login
+        document.getElementById('loginBtn').onclick = login;
+    </script>
+</body>
+</html>

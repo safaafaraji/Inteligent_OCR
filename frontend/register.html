@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - OCR Intelligent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <a href="index.html" class="flex items-center space-x-3">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <h1 class="text-2xl font-bold text-gray-900">OCR Intelligent</h1>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="login.html" class="text-sm font-medium text-gray-700 hover:text-gray-900">
+                            Se connecter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-md w-full space-y-8">
+                <div>
+                    <div class="flex justify-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        Créez votre compte
+                    </h2>
+                    <p class="mt-2 text-center text-sm text-gray-600">
+                        ou
+                        <a href="login.html" class="font-medium text-blue-600 hover:text-blue-500">
+                            connectez-vous à votre compte existant
+                        </a>
+                    </p>
+                </div>
+                
+                <!-- Registration Form -->
+                <form id="registerForm" class="mt-8 space-y-6" onsubmit="handleRegister(event)">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Prénom
+                                </label>
+                                <input id="firstName" name="firstName" type="text" required
+                                       class="form-input"
+                                       placeholder="Votre prénom">
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Nom
+                                </label>
+                                <input id="lastName" name="lastName" type="text" required
+                                       class="form-input"
+                                       placeholder="Votre nom">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                                Adresse email
+                            </label>
+                            <input id="email" name="email" type="email" required
+                                   class="form-input"
+                                   placeholder="vous@exemple.com">
+                        </div>
+
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
+                                Nom d'utilisateur
+                            </label>
+                            <input id="username" name="username" type="text" required
+                                   class="form-input"
+                                   placeholder="Choisissez un nom d'utilisateur">
+                            <p class="mt-1 text-xs text-gray-500">
+                                Ce nom sera visible par les autres utilisateurs
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Mot de passe
+                                </label>
+                                <input id="password" name="password" type="password" required
+                                       class="form-input"
+                                       placeholder="Minimum 8 caractères">
+                                <div class="mt-1 space-y-1">
+                                    <div class="flex items-center">
+                                        <div id="lengthCheck" class="w-2 h-2 rounded-full bg-gray-300 mr-2"></div>
+                                        <span class="text-xs text-gray-500">8 caractères minimum</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div id="complexityCheck" class="w-2 h-2 rounded-full bg-gray-300 mr-2"></div>
+                                        <span class="text-xs text-gray-500">Lettres et chiffres</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Confirmer le mot de passe
+                                </label>
+                                <input id="confirmPassword" name="confirmPassword" type="password" required
+                                       class="form-input"
+                                       placeholder="Retapez votre mot de passe">
+                                <div class="mt-1">
+                                    <div class="flex items-center">
+                                        <div id="matchCheck" class="w-2 h-2 rounded-full bg-gray-300 mr-2"></div>
+                                        <span class="text-xs text-gray-500">Les mots de passe correspondent</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input id="terms" name="terms" type="checkbox" required
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="terms" class="ml-2 block text-sm text-gray-900">
+                                J'accepte les
+                                <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                                    conditions d'utilisation
+                                </a>
+                                et la
+                                <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                                    politique de confidentialité
+                                </a>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input id="newsletter" name="newsletter" type="checkbox"
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="newsletter" class="ml-2 block text-sm text-gray-900">
+                                Je souhaite recevoir des informations sur les nouvelles fonctionnalités
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit"
+                                id="registerButton"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span id="buttonText">Créer mon compte</span>
+                            <svg id="buttonSpinner" class="hidden w-5 h-5 ml-2 spinner" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Features -->
+                <div class="mt-8">
+                    <h3 class="text-sm font-medium text-gray-500 mb-4">Votre compte vous offre :</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-900">Documents illimités</h4>
+                                    <p class="text-xs text-gray-500">Traitez autant de documents que vous le souhaitez</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-900">Multi-formats</h4>
+                                    <p class="text-xs text-gray-500">Exportez vos résultats en JSON, CSV, Excel, PDF</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-900">Traitement rapide</h4>
+                                    <p class="text-xs text-gray-500">Analyse en moins de 10 secondes par page</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white">
+            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <p class="text-gray-400 text-sm">&copy; 2024 OCR Intelligent. Tous droits réservés.</p>
+                    <div class="mt-2 space-x-4 text-sm">
+                        <a href="#" class="text-gray-400 hover:text-white">Confidentialité</a>
+                        <a href="#" class="text-gray-400 hover:text-white">CGU</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Support</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
+</body>
+</html>
