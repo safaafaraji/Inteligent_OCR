@@ -303,12 +303,24 @@ class APIClient {
             xhr.addEventListener('load', () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     try {
-                        resolve(JSON.parse(xhr.responseText));
+                        const response = JSON.parse(xhr.responseText);
+                        resolve(response);
                     } catch (error) {
-                        resolve(xhr.responseText);
+                        // Si ce n'est pas du JSON, essayer de parser l'erreur
+                        console.error('Erreur parsing réponse:', xhr.responseText);
+                        reject(new Error(`Réponse invalide du serveur: ${xhr.responseText}`));
                     }
                 } else {
-                    reject(new Error(`Upload failed: ${xhr.statusText}`));
+                    // Essayer de parser le message d'erreur du backend
+                    let errorMessage = `Upload failed: ${xhr.statusText}`;
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        errorMessage = errorResponse.detail || errorResponse.message || errorMessage;
+                    } catch (e) {
+                        // Si ce n'est pas du JSON, utiliser le texte brut
+                        errorMessage = xhr.responseText || errorMessage;
+                    }
+                    reject(new Error(errorMessage));
                 }
             });
 

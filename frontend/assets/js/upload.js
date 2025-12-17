@@ -172,17 +172,28 @@ async function processOCR() {
             if (progressText) progressText.textContent = `Traitement du fichier ${i + 1}/${selectedFiles.length}`;
             
             // Uploader le fichier
+            if (progressText) progressText.textContent = `Upload du fichier ${i + 1}/${selectedFiles.length}: ${file.name}`;
+            
             const result = await api.uploadFile(file, language, (uploadProgress) => {
                 // Calculer la progression globale
                 const fileProgress = uploadProgress / selectedFiles.length;
                 const totalProgress = (i * 100) + fileProgress;
-                if (progressBar) progressBar.style.width = `${totalProgress}%`;
-                if (progressPercent) progressPercent.textContent = `${Math.round(totalProgress)}%`;
+                if (progressBar) progressBar.style.width = `${Math.min(totalProgress, 100)}%`;
+                if (progressPercent) progressPercent.textContent = `${Math.round(Math.min(totalProgress, 100))}%`;
             });
             
-            if (result.success) {
+            console.log('Résultat upload:', result);
+            
+            // Vérifier si la réponse contient success ou process_id
+            if (result && (result.success || result.process_id)) {
                 // Stocker l'ID du processus pour le suivi
-                currentProcessId = result.process_id;
+                currentProcessId = result.process_id || result.result?.process_id;
+                
+                // Mettre à jour la progression
+                const finalProgress = Math.round(((i + 1) / selectedFiles.length) * 100);
+                if (progressBar) progressBar.style.width = `${finalProgress}%`;
+                if (progressPercent) progressPercent.textContent = `${finalProgress}%`;
+                if (progressText) progressText.textContent = `Fichier ${i + 1}/${selectedFiles.length} traité avec succès`;
                 
                 // Rediriger vers la page des résultats après le dernier fichier
                 if (i === selectedFiles.length - 1) {
@@ -190,17 +201,28 @@ async function processOCR() {
                     
                     // Attendre 2 secondes puis rediriger
                     setTimeout(() => {
-                        window.location.href = `results.html?process_id=${result.process_id}`;
+                        window.location.href = `results.html?process_id=${currentProcessId}`;
                     }, 2000);
                 }
             } else {
-                throw new Error(result.error || 'Erreur lors du traitement');
+                // Si la réponse n'a pas le format attendu, essayer de parser l'erreur
+                const errorMsg = result?.detail || result?.error || result?.message || 'Erreur lors du traitement';
+                throw new Error(errorMsg);
             }
         }
         
     } catch (error) {
         console.error('OCR Processing Error:', error);
-        showNotification(`Erreur : ${error.message}`, 'error');
+        
+        // Afficher un message d'erreur détaillé
+        let errorMessage = 'Erreur lors du traitement';
+        if (error.message) {
+            errorMessage = error.message;
+        } else if (typeof error === 'string') {
+            errorMessage = error;
+        }
+        
+        showNotification(`Erreur : ${errorMessage}`, 'error');
         
         // Réinitialiser l'état
         isProcessing = false;
@@ -208,6 +230,10 @@ async function processOCR() {
         
         // Cacher la barre de progression
         if (progressContainer) progressContainer.classList.add('hidden');
+        
+        // Réinitialiser les fichiers sélectionnés pour permettre un nouvel essai
+        selectedFiles = [];
+        updateFileList();
     }
 }
 

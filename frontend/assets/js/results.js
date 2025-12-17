@@ -1,62 +1,262 @@
-const API_BASE_URL = 'http://localhost:8000/api/v1';
-let currentTab = 'all';
-let allResults = [];
+const API_BASE_URL = 'http://localhost:8000/api/ocr';
+let currentResult = null;
+let currentTab = 'structured';
 
 // Initialisation - seulement sur la page results.html
 document.addEventListener('DOMContentLoaded', async () => {
     // Vérifier qu'on est bien sur la page results.html
-    const resultsContainer = document.getElementById('resultsContainer');
-    if (!resultsContainer) {
+    const loadingState = document.getElementById('loadingState');
+    const resultsContent = document.getElementById('resultsContent');
+    
+    if (!loadingState && !resultsContent) {
         // Pas sur la page results.html, ne rien faire
         return;
     }
     
-    await loadResults();
-    setupEventListeners();
+    // Vérifier s'il y a un process_id dans l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const processId = urlParams.get('process_id');
+    
+    if (processId) {
+        await loadResultById(processId);
+    } else {
+        // Pas de process_id, afficher un message d'erreur
+        showErrorState('Aucun identifiant de traitement fourni');
+    }
 });
 
-async function loadResults() {
+async function loadResultById(processId) {
     try {
-        showLoading();
-        
-        // Récupérer les résultats depuis l'API ou le localStorage
         const token = localStorage.getItem('auth_token');
+        let url = `${API_BASE_URL}/results/${processId}`;
         
+        // Ajouter le token en query parameter si disponible
         if (token) {
-            // Charger depuis l'API
-            const response = await fetch(`${API_BASE_URL}/results?limit=50`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (response.ok) {
-                allResults = await response.json();
-            } else {
-                // Fallback sur le localStorage
-                allResults = JSON.parse(localStorage.getItem('ocr_results') || '[]');
-            }
-        } else {
-            // Charger depuis le localStorage
-            allResults = JSON.parse(localStorage.getItem('ocr_results') || '[]');
+            url += `?token=${token}`;
         }
         
-        displayResults();
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+        }
+        
+        currentResult = await response.json();
+        displayResult(currentResult);
         
     } catch (error) {
         console.error('Erreur de chargement:', error);
-        showError('Erreur lors du chargement des résultats');
+        showErrorState(`Erreur lors du chargement: ${error.message}`);
     }
 }
 
+function displayResult(result) {
+    // Cacher l'état de chargement
+    const loadingState = document.getElementById('loadingState');
+    const resultsContent = document.getElementById('resultsContent');
+    const errorState = document.getElementById('errorState');
+    
+    if (loadingState) loadingState.classList.add('hidden');
+    if (errorState) errorState.classList.add('hidden');
+    if (resultsContent) resultsContent.classList.remove('hidden');
+    
+    // Mettre à jour les informations du document
+    if (result.filename) {
+        const fileNameEl = document.getElementById('fileName');
+        if (fileNameEl) fileNameEl.textContent = result.filename;
+    }
+    
+    if (result.document_type) {
+        const docTypeEl = document.getElementById('documentType');
+        if (docTypeEl) docTypeEl.textContent = result.document_type;
+    }
+    
+    if (result.total_pages) {
+        const pageCountEl = document.getElementById('pageCount');
+        if (pageCountEl) pageCountEl.textContent = result.total_pages;
+    }
+    
+    if (result.average_confidence !== undefined) {
+        const confidenceEl = document.getElementById('confidenceScore');
+        if (confidenceEl) {
+            const percent = Math.round(result.average_confidence * 100);
+            confidenceEl.textContent = `${percent}% confiance`;
+        }
+    }
+    
+    // Afficher les données structurées
+    if (result.structured_data) {
+        displayStructuredData(result.structured_data);
+    }
+    
+    // Afficher le texte brut
+    if (result.text) {
+        const rawTextEl = document.getElementById('rawText');
+        if (rawTextEl) rawTextEl.textContent = result.text;
+    }
+    
+    // Afficher les zones
+    if (result.zones && result.zones.length > 0) {
+        displayZones(result.zones);
+    }
+    
+    // Mettre à jour le statut
+    const statusBadge = document.getElementById('statusBadge');
+    if (statusBadge) {
+        statusBadge.textContent = 'Terminé';
+        statusBadge.className = 'badge status-completed';
+    }
+    
+    // Mettre à jour le process ID
+    const processIdEl = document.getElementById('processId');
+    if (processIdEl && result.process_id) {
+        processIdEl.textContent = `ID: ${result.process_id}`;
+    }
+}
+
+function displayStructuredData(structuredData) {
+    const tbody = document.getElementById('structuredData');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    if (structuredData.fields) {
+        Object.entries(structuredData.fields).forEach(([fieldName, fieldValues]) => {
+            if (Array.isArray(fieldValues) && fieldValues.length > 0) {
+                fieldValues.forEach(fieldValue => {
+                    const row = document.createElement('tr');
+                    const value = fieldValue.value || (typeof fieldValue === 'string' ? fieldValue : JSON.stringify(fieldValue));
+                    const confidence = fieldValue.confidence !== undefined ? 
+                        `${Math.round(fieldValue.confidence * 100)}%` : 'N/A';
+                    
+                    row.innerHTML = `
+                        <td class="font-medium">${fieldName}</td>
+                        <td>${value}</td>
+                        <td>${confidence}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        });
+    }
+    
+    // Si pas de champs, afficher les entités
+    if (structuredData.entities && Object.keys(structuredData.entities).length > 0) {
+        Object.entries(structuredData.entities).forEach(([entityType, values]) => {
+            if (Array.isArray(values)) {
+                values.forEach(value => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="font-medium">${entityType}</td>
+                        <td>${value}</td>
+                        <td>N/A</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        });
+    }
+}
+
+function displayZones(zones) {
+    const zonesList = document.getElementById('zonesList');
+    if (!zonesList) return;
+    
+    zonesList.innerHTML = zones.map((zone, index) => `
+        <div class="border border-gray-200 rounded-lg p-4">
+            <div class="flex justify-between items-center mb-2">
+                <span class="font-medium">Zone ${index + 1}</span>
+                <span class="text-xs px-2 py-1 bg-gray-100 rounded">${zone.type || 'texte'}</span>
+            </div>
+            ${zone.text ? `<p class="text-sm text-gray-700 mt-2">${zone.text}</p>` : ''}
+            ${zone.position ? `
+                <p class="text-xs text-gray-500 mt-2">
+                    Position: (${zone.position.x}, ${zone.position.y}) - 
+                    Taille: ${zone.position.width}x${zone.position.height}
+                </p>
+            ` : ''}
+        </div>
+    `).join('');
+}
+
+function showErrorState(message) {
+    const loadingState = document.getElementById('loadingState');
+    const resultsContent = document.getElementById('resultsContent');
+    const errorState = document.getElementById('errorState');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    if (loadingState) loadingState.classList.add('hidden');
+    if (resultsContent) resultsContent.classList.add('hidden');
+    if (errorState) errorState.classList.remove('hidden');
+    if (errorMessage) errorMessage.textContent = message;
+}
+
+function switchTab(tabName) {
+    currentTab = tabName;
+    
+    // Mettre à jour les boutons d'onglets
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-tab="${tabName}"]`)?.classList.add('active');
+    
+    // Afficher/masquer les contenus
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    
+    const targetTab = document.getElementById(`${tabName}Tab`);
+    if (targetTab) targetTab.classList.remove('hidden');
+}
+
+// Exposer les fonctions globales
+window.switchTab = switchTab;
+window.exportResult = function(format) {
+    if (!currentResult || !currentResult.process_id) {
+        alert('Aucun résultat à exporter');
+        return;
+    }
+    
+    const url = `${API_BASE_URL}/results/${currentResult.process_id}/download/${format}`;
+    const token = localStorage.getItem('auth_token');
+    const finalUrl = token ? `${url}?token=${token}` : url;
+    
+    window.open(finalUrl, '_blank');
+};
+
+window.processAnother = function() {
+    window.location.href = 'upload.html';
+};
+
+window.saveToHistory = function() {
+    if (currentResult) {
+        // Sauvegarder dans localStorage
+        let history = JSON.parse(localStorage.getItem('ocr_history') || '[]');
+        history.push(currentResult);
+        localStorage.setItem('ocr_history', JSON.stringify(history));
+        alert('Résultat sauvegardé dans l\'historique');
+    }
+};
+
+window.shareResult = function() {
+    if (currentResult && currentResult.process_id) {
+        const url = `${window.location.origin}${window.location.pathname}?process_id=${currentResult.process_id}`;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('Lien copié dans le presse-papier !');
+        });
+    }
+};
+
+// Cette fonction n'est plus nécessaire pour la page results.html individuelle
+// Elle est gardée pour compatibilité avec history.html si nécessaire
 function setupEventListeners() {
-    // Filtre par type
+    // Filtre par type (seulement si l'élément existe)
     const filterType = document.getElementById('filterType');
     if (filterType) {
         filterType.addEventListener('change', filterResults);
     }
     
-    // Recherche
+    // Recherche (seulement si l'élément existe)
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('input', debounce(filterResults, 300));
@@ -575,8 +775,8 @@ function debounce(func, wait) {
 const resultModal = document.getElementById('resultModal');
 if (resultModal) {
     resultModal.addEventListener('click', (e) => {
-        if (e.target.id === 'resultModal') {
-            closeModal();
-        }
-    });
+    if (e.target.id === 'resultModal') {
+        closeModal();
+    }
+});
 }
