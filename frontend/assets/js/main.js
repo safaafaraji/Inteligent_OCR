@@ -140,8 +140,9 @@ function throttle(func, limit) {
 // Gestion de l'authentification
 class AuthManager {
     constructor() {
-        this.tokenKey = 'ocr_auth_token';
-        this.userKey = 'ocr_user_data';
+        // Utiliser les mêmes clés que le système d'auth du fichier auth.js
+        this.tokenKey = 'auth_token';
+        this.userKey = 'user_data';
     }
 
     isAuthenticated() {
@@ -421,10 +422,27 @@ const auth = new AuthManager();
 // Initialiser l'application
 document.addEventListener('DOMContentLoaded', function() {
     // Vérifier l'authentification sur les pages protégées
-    if (!window.location.pathname.includes('index.html') && 
-        !window.location.pathname.includes('login.html') && 
-        !window.location.pathname.includes('register.html')) {
-        auth.checkAuth();
+    const currentPage = window.location.pathname.split('/').pop();
+    const protectedPages = ['upload.html', 'results.html', 'history.html'];
+
+    // Si le système d'auth du fichier auth.js est présent, on le laisse gérer
+    if (window.AuthManager && typeof window.AuthManager.isAuthenticated === 'function') {
+        if (protectedPages.includes(currentPage) && !window.AuthManager.isAuthenticated()) {
+            showNotification('Veuillez vous connecter pour accéder à cette page', 'warning');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
+            return;
+        }
+    } else {
+        // Fallback : ancien système basé sur ce AuthManager local
+        if (protectedPages.includes(currentPage) && !auth.isAuthenticated()) {
+            showNotification('Veuillez vous connecter pour accéder à cette page', 'warning');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
+            return;
+        }
     }
 
     // Gérer les formulaires de connexion/déconnexion

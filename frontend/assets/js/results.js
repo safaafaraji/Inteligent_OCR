@@ -2,8 +2,15 @@ const API_BASE_URL = 'http://localhost:8000/api/v1';
 let currentTab = 'all';
 let allResults = [];
 
-// Initialisation
+// Initialisation - seulement sur la page results.html
 document.addEventListener('DOMContentLoaded', async () => {
+    // Vérifier qu'on est bien sur la page results.html
+    const resultsContainer = document.getElementById('resultsContainer');
+    if (!resultsContainer) {
+        // Pas sur la page results.html, ne rien faire
+        return;
+    }
+    
     await loadResults();
     setupEventListeners();
 });
@@ -44,10 +51,16 @@ async function loadResults() {
 
 function setupEventListeners() {
     // Filtre par type
-    document.getElementById('filterType').addEventListener('change', filterResults);
+    const filterType = document.getElementById('filterType');
+    if (filterType) {
+        filterType.addEventListener('change', filterResults);
+    }
     
     // Recherche
-    document.getElementById('searchInput').addEventListener('input', debounce(filterResults, 300));
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(filterResults, 300));
+    }
 }
 
 function showTab(tabName) {
@@ -68,8 +81,13 @@ function showTab(tabName) {
 }
 
 function filterResults() {
-    const filterType = document.getElementById('filterType').value;
-    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const filterTypeEl = document.getElementById('filterType');
+    const searchInputEl = document.getElementById('searchInput');
+    
+    if (!filterTypeEl || !searchInputEl) return; // Ne rien faire si les éléments n'existent pas
+    
+    const filterType = filterTypeEl.value;
+    const searchQuery = searchInputEl.value.toLowerCase();
     
     let filteredResults = [...allResults];
     
@@ -114,6 +132,7 @@ function filterResults() {
 
 function displayResults(results = null) {
     const container = document.getElementById('resultsContainer');
+    if (!container) return; // Ne rien faire si l'élément n'existe pas
     
     if (!results || results.length === 0) {
         container.innerHTML = `
@@ -239,6 +258,9 @@ async function viewResultDetails(processId) {
         }
         
         const modalContent = document.getElementById('modalContent');
+        if (!modalContent) {
+            throw new Error('Modal content non trouvé');
+        }
         
         modalContent.innerHTML = `
             <div class="space-y-6">
@@ -318,7 +340,10 @@ async function viewResultDetails(processId) {
             </div>
         `;
         
-        document.getElementById('modalTitle').textContent = `Résultat: ${result.filename}`;
+        const modalTitle = document.getElementById('modalTitle');
+        if (modalTitle) {
+            modalTitle.textContent = `Résultat: ${result.filename}`;
+        }
         openModal();
         
     } catch (error) {
@@ -431,6 +456,7 @@ function downloadFile(url, filename) {
 // Utilitaires
 function showLoading() {
     const container = document.getElementById('resultsContainer');
+    if (!container) return; // Ne rien faire si l'élément n'existe pas
     container.innerHTML = `
         <div class="text-center py-12">
             <svg class="animate-spin mx-auto h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -444,6 +470,7 @@ function showLoading() {
 
 function showLoadingModal() {
     const modalContent = document.getElementById('modalContent');
+    if (!modalContent) return; // Ne rien faire si l'élément n'existe pas
     modalContent.innerHTML = `
         <div class="text-center py-8">
             <svg class="animate-spin mx-auto h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -457,6 +484,7 @@ function showLoadingModal() {
 
 function showError(message) {
     const container = document.getElementById('resultsContainer');
+    if (!container) return; // Ne rien faire si l'élément n'existe pas
     container.innerHTML = `
         <div class="text-center py-12">
             <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -475,6 +503,7 @@ function showError(message) {
 
 function showErrorModal(message) {
     const modalContent = document.getElementById('modalContent');
+    if (!modalContent) return; // Ne rien faire si l'élément n'existe pas
     modalContent.innerHTML = `
         <div class="text-center py-8">
             <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -517,11 +546,17 @@ function showNotification(message, type = 'info') {
 }
 
 function openModal() {
-    document.getElementById('resultModal').classList.remove('hidden');
+    const modal = document.getElementById('resultModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
 }
 
 function closeModal() {
-    document.getElementById('resultModal').classList.add('hidden');
+    const modal = document.getElementById('resultModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
 }
 
 function debounce(func, wait) {
@@ -536,9 +571,12 @@ function debounce(func, wait) {
     };
 }
 
-// Gérer les clics en dehors de la modale
-document.getElementById('resultModal').addEventListener('click', (e) => {
-    if (e.target.id === 'resultModal') {
-        closeModal();
-    }
-});
+// Gérer les clics en dehors de la modale (seulement si la modale existe)
+const resultModal = document.getElementById('resultModal');
+if (resultModal) {
+    resultModal.addEventListener('click', (e) => {
+        if (e.target.id === 'resultModal') {
+            closeModal();
+        }
+    });
+}
