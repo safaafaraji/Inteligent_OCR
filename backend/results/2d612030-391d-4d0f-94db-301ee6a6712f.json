@@ -1,0 +1,157 @@
+{
+  "success": true,
+  "filename": "S1_S2.pdf",
+  "document_type": "invoice",
+  "total_pages": 1,
+  "text": "--- Page 1 ---\nJe gris hashes ig Vga Obl) Anola\n\nUniversité Sultan Moulay Slimane Béni Mellal\n\nAnnée universitaire 2023/2024 masi dull\n\nEcole Supérieure de Technologie Fquih Ben Salah                                            ge coy Ai Un gl SU Lobel au pall\nRELEVE DE NOTES ET RESULTATS       Page: 1 / 1\n|          Session 2          |\nL'étudiante :     FARAJ! Safaa\nN° :       23014713       CNE : R139578721\nNée le :        13 septembre 2005 à: SIDI BELYOUT CASABLANCA ANFA\n\ninscrite en    Première Année DUT Génie Informatique\n\na obtenu les notes suivantes :\n\n;                  7                                    Note/Barème     Résultat                    Session             Pts jury         |\nAlgorithmique et les bases de                      12 /20                    Validé                S2 2023/24                   |\nprogrammation                                                                                                                       |\nArchitecture des ordinateurs                      16.8 /20                    Validé                $1 2023/24                    |\nMathématiques : Maths discrètes et                12 /20                    Validé                S2 2023/24                    |\n\n| algebre linéaire                                                                                                                           |\n Langues et Techniques d'expression et de      16.2 /20                   Validé                S1 2023/24\ncommunication en in\nSemesire 1                                    44.25 /20                                        S2 2023/24\nSTRUCTURES DE DONN:ES ET            13.899 /20                   Validé               Si 2023/24\nPROGRAMMATION C++                                                                                                       |\nSystème d'exploitation                          13.5 /20                  Valide               S1 2023/24\nSystèmes d'information et bases de            17.25 120                    Validé                 S1 2023/24\n| données                                                                                                                              |\nRéseaux informatiques                         15.25 /20                   Validé                S1 2023/24\nSemestre 2                                      14.975 /20                                            S2 2023/24                  |\nRésultat d'admission session 2 :    14.613 / 20             Admis\n\nFait à Fquih Ben Salah, le 4 juillet 2024\nLe directeur de l'Ecole Supérieure de Technologie Fquih Ben Salah\n\nLe Directeur de L'EST FB\n\nAvis important : Il ne peut être délivré qu'un seul exemplaire du présent relevé de note. Aucun duplicata ne sera fourni.\n\n\n",
+  "pages": [
+    {
+      "page": 1,
+      "text": "Je gris hashes ig Vga Obl) Anola\n\nUniversité Sultan Moulay Slimane Béni Mellal\n\nAnnée universitaire 2023/2024 masi dull\n\nEcole Supérieure de Technologie Fquih Ben Salah                                            ge coy Ai Un gl SU Lobel au pall\nRELEVE DE NOTES ET RESULTATS       Page: 1 / 1\n|          Session 2          |\nL'étudiante :     FARAJ! Safaa\nN° :       23014713       CNE : R139578721\nNée le :        13 septembre 2005 à: SIDI BELYOUT CASABLANCA ANFA\n\ninscrite en    Première Année DUT Génie Informatique\n\na obtenu les notes suivantes :\n\n;                  7                                    Note/Barème     Résultat                    Session             Pts jury         |\nAlgorithmique et les bases de                      12 /20                    Validé                S2 2023/24                   |\nprogrammation                                                                                                                       |\nArchitecture des ordinateurs                      16.8 /20                    Validé                $1 2023/24                    |\nMathématiques : Maths discrètes et                12 /20                    Validé                S2 2023/24                    |\n\n| algebre linéaire                                                                                                                           |\n Langues et Techniques d'expression et de      16.2 /20                   Validé                S1 2023/24\ncommunication en in\nSemesire 1                                    44.25 /20                                        S2 2023/24\nSTRUCTURES DE DONN:ES ET            13.899 /20                   Validé               Si 2023/24\nPROGRAMMATION C++                                                                                                       |\nSystème d'exploitation                          13.5 /20                  Valide               S1 2023/24\nSystèmes d'information et bases de            17.25 120                    Validé                 S1 2023/24\n| données                                                                                                                              |\nRéseaux informatiques                         15.25 /20                   Validé                S1 2023/24\nSemestre 2                                      14.975 /20                                            S2 2023/24                  |\nRésultat d'admission session 2 :    14.613 / 20             Admis\n\nFait à Fquih Ben Salah, le 4 juillet 2024\nLe directeur de l'Ecole Supérieure de Technologie Fquih Ben Salah\n\nLe Directeur de L'EST FB\n\nAvis important : Il ne peut être délivré qu'un seul exemplaire du présent relevé de note. Aucun duplicata ne sera fourni.\n",
+      "confidence": 0.8904225352112677,
+      "word_count": 246,
+      "data": {
+        "confidence": 0.8904225352112677,
+        "word_count": 246,
+        "layout": {
+          "block_count": 41,
+          "blocks": [
+            {
+              "text": "Je gris hashes ig Vga Obl) Anola Université Sultan Moulay Slimane Béni Mellal",
+              "top": 89,
+              "left": 1925,
+              "width": 57,
+              "height": 32
+            },
+            {
+              "text": "Année universitaire 2023/2024 masi dull",
+              "top": 207,
+              "left": 867,
+              "width": 118,
+              "height": 30
+            },
+            {
+              "text": "Ecole Supérieure de Technologie Fquih Ben Salah ge coy Ai Un",
+              "top": 306,
+              "left": 157,
+              "width": 104,
+              "height": 31
+            },
+            {
+              "text": "gl SU Lobel au pall",
+              "top": 276,
+              "left": 2157,
+              "width": 20,
+              "height": 57
+            },
+            {
+              "text": "RELEVE DE NOTES ET RESULTATS Page: 1 / 1",
+              "top": 412,
+              "left": 738,
+              "width": 259,
+              "height": 50
+            },
+            {
+              "text": "| Session 2 |",
+              "top": 502,
+              "left": 952,
+              "width": 2,
+              "height": 67
+            },
+            {
+              "text": "L'étudiante : FARAJ! Safaa",
+              "top": 613,
+              "left": 162,
+              "width": 156,
+              "height": 24
+            },
+            {
+              "text": "N° : 23014713 CNE : R139578721",
+              "top": 692,
+              "left": 163,
+              "width": 39,
+              "height": 30
+            },
+            {
+              "text": "Née le : 13 septembre 2005 à: SIDI BELYOUT CASABLANCA ANFA",
+              "top": 766,
+              "left": 162,
+              "width": 69,
+              "height": 31
+            },
+            {
+              "text": "inscrite en Première Année DUT Génie",
+              "top": 845,
+              "left": 162,
+              "width": 126,
+              "height": 30
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "structured_data": {
+    "document_type": "invoice",
+    "entities": {
+      "name": [
+        "oulay Slimane",
+        "is  Fait",
+        "ation et",
+        "plaire du",
+        "ellal  Ann",
+        "ission session",
+        "asi dull",
+        "munication en",
+        "ique et",
+        "aths discr"
+      ],
+      "date": [
+        "13 septembre 2005",
+        "4 juillet 2024"
+      ]
+    },
+    "raw_matches": {
+      "name": [
+        "oulay Slimane",
+        "is  Fait",
+        "ation et",
+        "plaire du",
+        "ellal  Ann",
+        "ission session",
+        "asi dull",
+        "munication en",
+        "ique et",
+        "aths discr"
+      ],
+      "date": [
+        "13 septembre 2005",
+        "4 juillet 2024"
+      ]
+    },
+    "invoice_info": {},
+    "personal_info": {
+      "full_name": "ni Mellal",
+      "first_name": "ni",
+      "last_name": "Mellal",
+      "email": null,
+      "phone": null,
+      "address": null
+    },
+    "stats": {
+      "word_count": 250,
+      "line_count": 46,
+      "entity_count": 2,
+      "match_count": 12
+    }
+  },
+  "zones": [],
+  "average_confidence": 0.8904225352112677,
+  "metadata": {
+    "processing_date": "2025-12-17T16:47:12.616761",
+    "language": "fra+eng",
+    "file_size": 167989
+  },
+  "process_id": "2d612030-391d-4d0f-94db-301ee6a6712f",
+  "upload_timestamp": "2025-12-17T16:47:12.617358"
+}

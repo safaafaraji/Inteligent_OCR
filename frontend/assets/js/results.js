@@ -1,4 +1,6 @@
 const API_BASE_URL = 'http://localhost:8000/api/ocr';
+
+// ⭐⭐ AJOUTER CETTE LIGNE (déclaration manquante) ⭐⭐
 let currentResult = null;
 let currentTab = 'structured';
 
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// Fonction loadResultById
 async function loadResultById(processId) {
     try {
         const token = localStorage.getItem('auth_token');
@@ -41,6 +44,7 @@ async function loadResultById(processId) {
             throw new Error(`Erreur ${response.status}: ${response.statusText}`);
         }
         
+        // ⭐⭐ CORRECT : Assignation sans redéclaration ⭐⭐
         currentResult = await response.json();
         displayResult(currentResult);
         
@@ -49,6 +53,7 @@ async function loadResultById(processId) {
         showErrorState(`Erreur lors du chargement: ${error.message}`);
     }
 }
+
 
 function displayResult(result) {
     // Cacher l'état de chargement

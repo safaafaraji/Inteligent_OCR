@@ -1,9 +1,10 @@
 import os  # Ajouter en haut du fichier
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends, BackgroundTasks
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse, PlainTextResponse
 from typing import Optional
 import uuid
 import asyncio
+import json
 from datetime import datetime
 import logging
 
@@ -284,7 +285,87 @@ def save_results_to_db(
     user_id: Optional[int]
 ):
     """
-    Sauvegarde les résultats en base de données
+    Sauvegarde les résultats en base de données (implémentation minimale pour tests locaux)
     """
-    # À implémenter avec les modèles SQLAlchemy
-    pass
+    try:
+        os.makedirs("results", exist_ok=True)
+        record = {
+            "process_id": process_id,
+            "filename": filename,
+            "document_type": result.get("document_type", result.get("doc_type", "")),
+            "total_pages": len(result.get("pages", [])),
+            "text": result.get("text", ""),
+            "pages": result.get("pages", []),
+            "average_confidence": result.get("confidence", result.get("average_confidence", 0)),
+            "extraction_date": datetime.now().isoformat(),
+            "export_paths": export_paths,
+            "processing_time": processing_time,
+            "user_id": user_id,
+            "result": result
+        }
+        with open(f"results/{process_id}.json", "w", encoding="utf-8") as f:
+            json.dump(record, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        logger.error(f"Erreur sauvegarde résultats: {str(e)}")
+
+
+@router.get("/results/{process_id}/download/{format}")
+async def download_results(
+    process_id: str,
+    format: str
+):
+    """
+    Télécharge un fichier exporté (compatible avec les appels frontend `/api/ocr/results/{id}/download/{format}`)
+    """
+    try:
+        export_dir = os.path.join(settings.UPLOAD_DIR, "exports")
+        base_filename = f"export_{process_id}"
+        # Map formats to file extensions
+        if format == "json":
+            ext = "json"
+            media_type = "application/json"
+        elif format == "csv":
+            ext = "csv"
+            media_type = "text/csv"
+        elif format in ("excel", "xlsx"):
+            ext = "xlsx"
+            media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        elif format == "txt":
+            ext = "txt"
+            media_type = "text/plain"
+        else:
+            ext = format
+            media_type = "application/octet-stream"
+
+        file_path = os.path.join(export_dir, f"{base_filename}.{ext}")
+
+        # Si le fichier d'export est déjà présent
+        if os.path.exists(file_path):
+            return FileResponse(path=file_path, filename=os.path.basename(file_path), media_type=media_type)
+
+        # Sinon, si nous avons un résultat JSON sauvegardé localement, générer/retourner selon format
+        results_file = os.path.join("results", f"{process_id}.json")
+        if os.path.exists(results_file):
+            with open(results_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            # Si JSON demandé, retourner le JSON
+            if format == "json":
+                return JSONResponse(content=data)
+
+            # Si TXT demandé, retourner le texte brut
+            if format == "txt":
+                text = data.get("text", "")
+                return PlainTextResponse(text, media_type="text/plain", headers={"Content-Disposition": f"attachment; filename={process_id}.txt"})
+
+            # Si CSV demandé, générer un fichier CSV temporaire dans export_dir
+            if format == "csv":
+                os.makedirs(export_dir, exist_ok=True)
+                tmp_csv = os.path.join(export_dir, f"{base_filename}.csv")
+                ExportUtils.to_csv(data.get("result", data), tmp_csv)
+                return FileResponse(path=tmp_csv, filename=os.path.basename(tmp_csv), media_type="text/csv")
+
+        raise HTTPException(status_code=404, detail="Fichier non trouvé")
+    except Exception as e:
+        logger.error(f"Erreur téléchargement export: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

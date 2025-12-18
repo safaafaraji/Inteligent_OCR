@@ -1,0 +1,146 @@
+{
+  "success": true,
+  "filename": "attestation_réussite.pdf",
+  "document_type": "form",
+  "total_pages": 1,
+  "text": "--- Page 1 ---\nUNIVERSITÉ SULTAN MOULAY SLIMANE BÉNI MELLAL\nJoe qi Casta (5454 CiUalaull Âtala\n\nATTESTATION DE REUSSITE AU DIPLOME\n\nLe directeur de l'Ecole Supérieure de Technologie Fquih Ben Salah atteste que\n\nle Diplôme Universitaire de Technologie Génie Informatique\na été décerné à\n\nMadame FARAJI SAFAA\nnée le 13 septembre 2005 à SIDI BELYOUT CASABLANCA ANFA\n\nau titre de l'année universitaire 2024/2025 avec la mention Bien\n\nFait a Béni Melial, le 30 juin 2025\n\nLe Directeur de L'EST-FB\nN° étudiant :     23014713                                                     .\n\nse\n\nTA\n\nAvis important: Il ne peut être délivré qu'un seul exemplaire de cette attestation. Aucun duplig  an\n\n\n\n",
+  "pages": [
+    {
+      "page": 1,
+      "text": "UNIVERSITÉ SULTAN MOULAY SLIMANE BÉNI MELLAL\nJoe qi Casta (5454 CiUalaull Âtala\n\nATTESTATION DE REUSSITE AU DIPLOME\n\nLe directeur de l'Ecole Supérieure de Technologie Fquih Ben Salah atteste que\n\nle Diplôme Universitaire de Technologie Génie Informatique\na été décerné à\n\nMadame FARAJI SAFAA\nnée le 13 septembre 2005 à SIDI BELYOUT CASABLANCA ANFA\n\nau titre de l'année universitaire 2024/2025 avec la mention Bien\n\nFait a Béni Melial, le 30 juin 2025\n\nLe Directeur de L'EST-FB\nN° étudiant :     23014713                                                     .\n\nse\n\nTA\n\nAvis important: Il ne peut être délivré qu'un seul exemplaire de cette attestation. Aucun duplig  an\n\n",
+      "confidence": 0.9015686274509804,
+      "word_count": 98,
+      "data": {
+        "confidence": 0.9015686274509804,
+        "word_count": 98,
+        "layout": {
+          "block_count": 16,
+          "blocks": [
+            {
+              "text": "UNIVERSITÉ SULTAN MOULAY SLIMANE BÉNI MELLAL",
+              "top": 90,
+              "left": 628,
+              "width": 297,
+              "height": 47
+            },
+            {
+              "text": "Joe qi Casta (5454 CiUalaull Âtala",
+              "top": 177,
+              "left": 984,
+              "width": 70,
+              "height": 39
+            },
+            {
+              "text": "ATTESTATION DE REUSSITE AU DIPLOME",
+              "top": 314,
+              "left": 794,
+              "width": 345,
+              "height": 37
+            },
+            {
+              "text": "Le directeur de l'Ecole Supérieure de Technologie Fquih Ben Salah atteste que",
+              "top": 541,
+              "left": 560,
+              "width": 41,
+              "height": 31
+            },
+            {
+              "text": "le Diplôme Universitaire de Technologie Génie Informatique",
+              "top": 626,
+              "left": 698,
+              "width": 30,
+              "height": 30
+            },
+            {
+              "text": "a été décerné à",
+              "top": 688,
+              "left": 1167,
+              "width": 20,
+              "height": 22
+            },
+            {
+              "text": "Madame FARAJI SAFAA",
+              "top": 767,
+              "left": 1052,
+              "width": 163,
+              "height": 31
+            },
+            {
+              "text": "née le 13 septembre 2005 à SIDI BELYOUT CASABLANCA ANFA",
+              "top": 826,
+              "left": 662,
+              "width": 65,
+              "height": 31
+            },
+            {
+              "text": "au titre de l'année universitaire 2024/2025 avec la mention Bien",
+              "top": 923,
+              "left": 696,
+              "width": 42,
+              "height": 23
+            },
+            {
+              "text": "Fait a Béni Melial, le 30 juin 2025",
+              "top": 2849,
+              "left": 1460,
+              "width": 65,
+              "height": 31
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "structured_data": {
+    "document_type": "form",
+    "entities": {
+      "name": [
+        "ELLAL Joe",
+        "adame FARAJI",
+        "ention Bien",
+        "OULAY SLIMANE",
+        "plaire de"
+      ],
+      "date": [
+        "13 septembre 2005",
+        "30 juin 2025"
+      ]
+    },
+    "raw_matches": {
+      "name": [
+        "ELLAL Joe",
+        "adame FARAJI",
+        "ention Bien",
+        "OULAY SLIMANE",
+        "plaire de"
+      ],
+      "date": [
+        "13 septembre 2005",
+        "30 juin 2025"
+      ]
+    },
+    "personal_info": {
+      "full_name": "NI MELLAL",
+      "first_name": "NI",
+      "last_name": "MELLAL",
+      "email": null,
+      "phone": null,
+      "address": null
+    },
+    "stats": {
+      "word_count": 102,
+      "line_count": 30,
+      "entity_count": 2,
+      "match_count": 7
+    }
+  },
+  "zones": [],
+  "average_confidence": 0.9015686274509804,
+  "metadata": {
+    "processing_date": "2025-12-17T16:47:07.791502",
+    "language": "fra+eng",
+    "file_size": 2389518
+  },
+  "process_id": "0a80f588-d3d6-43a0-aaa3-c5cbfdda69bd",
+  "upload_timestamp": "2025-12-17T16:47:07.792374"
+}

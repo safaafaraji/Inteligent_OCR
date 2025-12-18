@@ -373,20 +373,41 @@ async def get_results(process_id: str, current_user: User = Depends(get_current_
 async def download_results(
     process_id: str,
     format: str,  # json, txt, csv
-    current_user: User = Depends(get_current_user)
+    token: Optional[str] = None,
+    authorization: Optional[str] = Header(None)
 ):
-    """Télécharge les résultats dans différents formats"""
+    """Télécharge les résultats dans différents formats. Supporte soit l'entête Authorization, soit `?token=` en query param."""
     filepath = f"results/{process_id}.json"
     
     if not os.path.exists(filepath):
         raise HTTPException(status_code=404, detail="Résultats non trouvés")
     
+    # Valider le token s'il est présent en query param, ou utiliser l'en-tête Authorization
+    current_username = None
+    try:
+        if token:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            current_username = payload.get("sub")
+        elif authorization:
+            scheme, auth_token = authorization.split()
+            if scheme.lower() != "bearer":
+                raise HTTPException(status_code=401, detail="Format d'authentification invalide")
+            payload = jwt.decode(auth_token, SECRET_KEY, algorithms=[ALGORITHM])
+            current_username = payload.get("sub")
+        else:
+            raise HTTPException(status_code=401, detail="Token manquant")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expiré")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token invalide")
+
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             result = json.load(f)
         
-        # Vérifier les permissions
-        if result.get("user") != current_user.username and current_user.username != "demo":
+        # Vérifier que l'utilisateur a accès à ces résultats
+        # Si le résultat n'a pas d'attribut 'user', le rendre public
+        if result.get("user") and result.get("user") != current_username and current_username != "demo":
             raise HTTPException(status_code=403, detail="Accès non autorisé")
         
         if format == "json":

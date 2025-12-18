@@ -31,9 +31,9 @@ def print_welcome():
     """Affiche le message de bienvenue"""
     print("""
     ╔════════════════════════════════════════════════════════════╗
-    ║                                                             ║
+    ║                                                            ║
     ║           OCR INTELLIGENT - FRONTEND DE DÉMO               ║
-    ║                                                             ║
+    ║                                                            ║
     ╚════════════════════════════════════════════════════════════╝
     
     📍 Frontend: http://localhost:3000
