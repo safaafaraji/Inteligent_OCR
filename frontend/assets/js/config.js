@@ -1,4 +1,4 @@
-// Configuration globale
+// config.js - Version mise à jour
 const CONFIG = {
     API_BASE_URL: 'http://localhost:8000',
     ENDPOINTS: {
@@ -13,14 +13,22 @@ const CONFIG = {
             PROCESS: '/api/ocr/process',
             BATCH_PROCESS: '/api/ocr/batch-process',
             RESULTS: '/api/ocr/results',
+            HISTORY: '/api/ocr/history',
             STATS: '/api/ocr/stats',
-            DOWNLOAD: '/api/ocr/results/{id}/download/{format}'
+            DOWNLOAD: '/api/ocr/results/{id}/download/{format}',
+            DELETE: '/api/ocr/results/{id}'
         }
     },
-    DEMO_CREDENTIALS: {
-        USERNAME: 'demo',
-        PASSWORD: 'demo123'
+    UPLOAD: {
+        MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+        ALLOWED_TYPES: ['pdf', 'jpg', 'jpeg', 'png', 'tiff', 'tif']
+    },
+    PAGINATION: {
+        ITEMS_PER_PAGE: 10
     }
 };
 
-// Pas de déclaration de 'api' ici - elle sera déclarée dans main.js
+// Export pour modules (si vous passez à ES6)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = CONFIG;
+}

@@ -1,248 +1,479 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR Intelligent - Extraction Automatique de Données</title>
+    <title>Intelligent OCR - AI Powered</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1c2e 0%, #303554 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-panel {
+            background: rgba(30, 32, 47, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <h1 class="text-2xl font-bold text-gray-900">OCR Intelligent</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="login.html" class="text-sm font-medium text-gray-700 hover:text-gray-900">Connexion</a>
-                    <a href="upload.html" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
-                        Commencer
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <!-- Hero Section -->
-    <div class="relative bg-white overflow-hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-                <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                    <div class="sm:text-center lg:text-left">
-                        <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                            <span class="block">Extraction intelligente</span>
-                            <span class="block text-blue-600">de données</span>
-                        </h1>
-                        <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                            Transformez vos documents scannés en données structurées automatiquement. Notre solution OCR avancée extrait les informations clés avec précision et rapidité.
-                        </p>
-                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div class="rounded-md shadow">
-                                <a href="upload.html" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
-                                    Essayer gratuitement
-                                </a>
-                            </div>
-                            <div class="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="#features" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10">
-                                    En savoir plus
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        </div>
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80" alt="Document analysis">
+<body class="selection:bg-indigo-500 selection:text-white">
+
+    <!-- Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/20 rounded-full blur-[120px]">
         </div>
     </div>
 
-    <!-- Features Section -->
-    <div id="features" class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="lg:text-center">
-                <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Fonctionnalités</h2>
-                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    Une solution OCR complète
-                </p>
-                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                    Découvrez comment notre solution peut automatiser votre traitement de documents
-                </p>
+    <!-- Navigation -->
+    <nav class="glass sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i class="fas fa-eye text-white text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold tracking-tight">Intelligent<span class="gradient-text">OCR</span></span>
             </div>
 
-            <div class="mt-10">
-                <div class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-                    <div class="relative">
-                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-16">
-                            <h3 class="text-lg font-medium text-gray-900">Multi-format</h3>
-                            <p class="mt-2 text-base text-gray-500">
-                                Supporte PDF, JPG, PNG, TIFF et plus encore. Conversion automatique et optimisation des images.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-16">
-                            <h3 class="text-lg font-medium text-gray-900">Rapide et précis</h3>
-                            <p class="mt-2 text-base text-gray-500">
-                                Traitement en moins de 10 secondes par page avec une précision supérieure à 90%.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-16">
-                            <h3 class="text-lg font-medium text-gray-900">Extraction intelligente</h3>
-                            <p class="mt-2 text-base text-gray-500">
-                                Détection automatique des zones importantes et extraction sémantique des données.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-16">
-                            <h3 class="text-lg font-medium text-gray-900">Export flexible</h3>
-                            <p class="mt-2 text-base text-gray-500">
-                                Exportez vos résultats en JSON, CSV, Excel ou XML pour une intégration facile.
-                            </p>
-                        </div>
-                    </div>
+            <div class="flex items-center gap-4">
+                <div id="userStatus" class="hidden flex items-center gap-3 px-4 py-2 rounded-full glass">
+                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    <span id="username" class="text-sm font-medium text-gray-300"></span>
                 </div>
+                <button id="authBtn"
+                    class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all font-medium text-sm flex items-center gap-2 border border-white/10">
+                    <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+                </button>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Stats Section -->
-    <div class="bg-gray-50 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
-                            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Vitesse</p>
-                            <p class="text-2xl font-semibold text-gray-900">&lt; 10s</p>
-                        </div>
-                    </div>
-                    <p class="mt-2 text-sm text-gray-600">par page traitée</p>
-                </div>
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-12">
 
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
-                            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Précision</p>
-                            <p class="text-2xl font-semibold text-gray-900">&gt; 90%</p>
-                        </div>
-                    </div>
-                    <p class="mt-2 text-sm text-gray-600">sur documents clairs</p>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
-                            <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414a1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Formats</p>
-                            <p class="text-2xl font-semibold text-gray-900">5+</p>
-                        </div>
-                    </div>
-                    <p class="mt-2 text-sm text-gray-600">PDF, JPG, PNG, TIFF</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CTA Section -->
-    <div class="bg-blue-700">
-        <div class="max-w-2xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
-                <span class="block">Prêt à automatiser votre traitement de documents ?</span>
-            </h2>
-            <p class="mt-4 text-lg leading-6 text-blue-200">
-                Commencez gratuitement dès aujourd'hui et économisez des heures de saisie manuelle.
+        <!-- Hero Section -->
+        <div class="text-center mb-16 slide-up" style="animation-delay: 0.1s">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                Extract Intelligence from <br>
+                <span class="gradient-text">Any Document</span>
+            </h1>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                Next-generation OCR powered by AI. Drag & drop CVs, Invoices, Essays, or .pages files.
+                We extract structured data instantly.
             </p>
-            <a href="upload.html" class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 sm:w-auto">
-                Télécharger un document
-            </a>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">OCR Intelligent</h3>
-                    <p class="text-gray-400">Solution d'extraction automatique de données depuis des documents scannés.</p>
+        <!-- Upload Zone -->
+        <div id="uploadContainer" class="max-w-3xl mx-auto slide-up" style="animation-delay: 0.2s">
+            <div id="dropZone"
+                class="glass-panel rounded-3xl p-12 text-center border-2 border-dashed border-indigo-500/30 hover:border-indigo-500/60 transition-all cursor-pointer group relative overflow-hidden">
+                <input type="file" id="fileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif,.pages">
+
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity">
                 </div>
-                <div>
-                    <h4 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Produit</h4>
-                    <ul class="space-y-2">
-                        <li><a href="upload.html" class="text-gray-400 hover:text-white">Traitement</a></li>
-                        <li><a href="results.html" class="text-gray-400 hover:text-white">Résultats</a></li>
-                        <li><a href="history.html" class="text-gray-400 hover:text-white">Historique</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Documentation</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white text-sm font-semibold tracking-wider uppercase mb-4">Légal</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Confidentialité</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">CGU</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Mentions légales</a></li>
-                    </ul>
+
+                <div class="relative z-10 space-y-6">
+                    <div
+                        class="w-20 h-20 mx-auto rounded-full bg-indigo-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 floating">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-indigo-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-2 text-white">Drop your file here</h3>
+                        <p class="text-gray-400">or click to browse</p>
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                        <span class="px-2 py-1 rounded bg-white/5">PDF</span>
+                        <span class="px-2 py-1 rounded bg-white/5">IMG</span>
+                        <span class="px-2 py-1 rounded bg-white/5">.pages</span>
+                    </div>
                 </div>
             </div>
-            <div class="mt-8 border-t border-gray-700 pt-8">
-                <p class="text-gray-400 text-sm text-center">&copy; 2024 OCR Intelligent. Tous droits réservés.</p>
+
+            <!-- Pre-process Options -->
+            <div class="mt-8 flex justify-center gap-4">
+                <div class="glass px-4 py-2 rounded-xl flex items-center gap-2">
+                    <i class="fas fa-language text-gray-400"></i>
+                    <select id="languageSelect"
+                        class="bg-transparent border-none text-sm focus:ring-0 cursor-pointer text-gray-300">
+                        <option value="fra+eng" class="bg-gray-800">🇫🇷 Français + 🇺🇸 Eng</option>
+                        <option value="eng" class="bg-gray-800">🇺🇸 English</option>
+                        <option value="fra" class="bg-gray-800">🇫🇷 Français</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </footer>
 
-    <script src="assets/js/main.js"></script>
+        <!-- Processing State -->
+        <div id="processingState" class="hidden max-w-lg mx-auto mt-12 text-center">
+            <div class="relative w-24 h-24 mx-auto mb-6">
+                <div class="absolute inset-0 rounded-full border-4 border-indigo-500/30"></div>
+                <div class="absolute inset-0 rounded-full border-t-4 border-indigo-500 animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fas fa-magic text-2xl text-indigo-400 animate-pulse"></i>
+                </div>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Analyzing Document...</h3>
+            <p class="text-gray-400 text-sm">Detecting structure, entities, and extracting text</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden mt-16 space-y-8 slide-up">
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="text-gray-400 text-sm mb-1">Document Type</div>
+                    <div id="resDocType" class="text-xl font-bold text-white capitalize">Invoice</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="text-gray-400 text-sm mb-1">Confidence</div>
+                    <div id="resConfidence" class="text-xl font-bold text-emerald-400">98.5%</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="text-gray-400 text-sm mb-1">Pages</div>
+                    <div id="resPages" class="text-xl font-bold text-white">2</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="text-gray-400 text-sm mb-1">Processing ID</div>
+                    <div id="resId" class="text-sm font-mono text-gray-300 truncate">#12345...</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Data Extraction Column -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="glass-panel rounded-3xl overflow-hidden">
+                        <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold flex items-center gap-2">
+                                <i class="fas fa-database text-indigo-400"></i> Structured Data
+                            </h3>
+                            <div class="flex gap-2">
+                                <button onclick="downloadResult('json')"
+                                    class="px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 text-xs font-medium transition-colors">
+                                    <i class="fas fa-download mr-1"></i> JSON
+                                </button>
+                                <button onclick="downloadResult('csv')"
+                                    class="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-medium transition-colors">
+                                    <i class="fas fa-table mr-1"></i> CSV
+                                </button>
+                            </div>
+                        </div>
+                        <div id="structuredDataContainer" class="p-6 space-y-4">
+                            <!-- Dynamic Content Here -->
+                        </div>
+                    </div>
+
+                    <!-- Raw Text -->
+                    <div class="glass-panel rounded-3xl overflow-hidden">
+                        <button onclick="toggleRawText()"
+                            class="w-full p-6 flex justify-between items-center hover:bg-white/5 transition-colors">
+                            <h3 class="text-lg font-semibold flex items-center gap-2">
+                                <i class="fas fa-align-left text-gray-400"></i> Raw Text Extraction
+                            </h3>
+                            <i id="rawTextArrow" class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                        </button>
+                        <div id="rawTextContainer" class="hidden border-t border-white/10 bg-black/20">
+                            <pre id="rawTextContent"
+                                class="p-6 text-sm text-gray-300 font-mono whitespace-pre-wrap overflow-x-auto max-h-96"></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Column (Optional/Placeholder for future) -->
+                <div class="space-y-6">
+                    <div class="glass-panel p-6 rounded-3xl">
+                        <h3 class="text-sm font-medium text-gray-400 mb-4 uppercase tracking-wider">File Info</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="text-xs text-gray-500 mb-1">Filename</div>
+                                <div id="resFilename" class="text-sm text-white break-all">document.pdf</div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-gray-500 mb-1">Date</div>
+                                <div id="resDate" class="text-sm text-white">2024-01-20</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="resetUI()"
+                        class="w-full py-4 rounded-xl border border-white/10 hover:bg-white/5 text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-redo-alt"></i> Process New File
+                    </button>
+
+                    <div id="errorZone"
+                        class="hidden p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm">
+                        <i class="fas fa-exclamation-circle mr-2"></i> <span id="errorMessage">Error text</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // API Configuration
+        const API_URL = 'http://localhost:8000/api';
+        let authToken = null;
+        let currentProcessId = null;
+
+        // --- Auth Logic ---
+        async function checkAuth() {
+            // Auto login with demo for this prototype
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'demo', password: 'demo123' })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    authToken = data.access_token;
+                    updateAuthUI('demo');
+                }
+            } catch (e) { console.error("Auth failed", e); }
+        }
+
+        function updateAuthUI(user) {
+            document.getElementById('userStatus').classList.remove('hidden');
+            document.getElementById('userStatus').classList.add('flex');
+            document.getElementById('username').textContent = user;
+            document.getElementById('authBtn').innerHTML = '<i class="fas fa-sign-out-alt"></i> <span>Logout</span>';
+            document.getElementById('authBtn').onclick = () => location.reload();
+        }
+
+        // --- File Handling ---
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        dropZone.addEventListener('dragover', () => dropZone.classList.add('border-indigo-500'));
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500'));
+        dropZone.addEventListener('drop', (e) => {
+            dropZone.classList.remove('border-indigo-500');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        async function handleFile(file) {
+            if (!file || !authToken) {
+                if (!authToken) showError("Authenticating... Please try again in a second.");
+                return;
+            }
+
+            // UI State
+            document.getElementById('uploadContainer').classList.add('hidden');
+            document.getElementById('processingState').classList.remove('hidden');
+            document.getElementById('errorZone').classList.add('hidden');
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('language', document.getElementById('languageSelect').value);
+
+            try {
+                const response = await fetch(`${API_URL}/ocr/extract`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error((await response.json()).detail || "Processing failed");
+
+                const result = await response.json();
+                currentProcessId = result.process_id;
+                renderResults(result);
+
+            } catch (error) {
+                showError(error.message);
+                resetUI();
+            }
+        }
+
+        // --- Rendering Results ---
+        function renderResults(data) {
+            document.getElementById('processingState').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+
+            // Header Info
+            document.getElementById('resDocType').textContent = data.document_type || 'Unknown';
+            document.getElementById('resConfidence').textContent = `${(data.average_confidence * 100).toFixed(1)}%`;
+            document.getElementById('resPages').textContent = data.total_pages;
+            document.getElementById('resId').textContent = data.process_id;
+            document.getElementById('resFilename').textContent = data.filename;
+            document.getElementById('resDate').textContent = new Date().toLocaleDateString();
+
+            // Structured Data Rendering
+            const container = document.getElementById('structuredDataContainer');
+            container.innerHTML = '';
+
+            const structData = data.structured_data || {};
+            const keys = Object.keys(structData);
+
+            if (keys.length === 0) {
+                container.innerHTML = '<div class="text-gray-400 italic">No structured data found for this document type.</div>';
+            } else {
+                keys.forEach(key => {
+                    const value = structData[key];
+                    if (!value || (Array.isArray(value) && value.length === 0)) return;
+
+                    const row = document.createElement('div');
+                    row.className = "flex flex-col sm:flex-row border-b border-white/5 pb-3 last:border-0";
+
+                    const label = document.createElement('div');
+                    label.className = "text-indigo-300 text-sm font-medium sm:w-1/3 mb-1 sm:mb-0 capitalize";
+                    label.textContent = key.replace(/_/g, ' ');
+
+                    const valDiv = document.createElement('div');
+                    valDiv.className = "text-gray-200 text-sm sm:w-2/3 break-words";
+
+                    if (Array.isArray(value)) {
+                        valDiv.innerHTML = value.map(v => `<span class="inline-block bg-white/10 px-2 py-1 rounded mr-2 mb-1 text-xs">${v}</span>`).join('');
+                    } else {
+                        valDiv.textContent = value;
+                    }
+
+                    row.appendChild(label);
+                    row.appendChild(valDiv);
+                    container.appendChild(row);
+                });
+            }
+
+            // Raw Text
+            document.getElementById('rawTextContent').textContent = data.text;
+        }
+
+        // --- Utils ---
+        function toggleRawText() {
+            const container = document.getElementById('rawTextContainer');
+            const arrow = document.getElementById('rawTextArrow');
+            container.classList.toggle('hidden');
+            arrow.style.transform = container.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        async function downloadResult(format) {
+            if (!currentProcessId) return;
+            try {
+                const res = await fetch(`${API_URL}/ocr/download/${currentProcessId}/${format}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ocr_result_${currentProcessId}.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } catch (e) {
+                showError("Download failed");
+            }
+        }
+
+        function resetUI() {
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('uploadContainer').classList.remove('hidden');
+            document.getElementById('processingState').classList.add('hidden');
+            fileInput.value = '';
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('errorZone');
+            const msgEl = document.getElementById('errorMessage');
+            el.classList.remove('hidden');
+            msgEl.textContent = msg;
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', checkAuth);
+
+    </script>
 </body>
+
 </html>

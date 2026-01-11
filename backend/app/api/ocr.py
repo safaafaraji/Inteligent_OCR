@@ -7,16 +7,22 @@ import asyncio
 import json
 from datetime import datetime
 import logging
+from app.services.ocr_service import OCRProcessor  # si ce service existe
 
-from app.schemas.ocr import OCRResponse, BatchOCRResponse
-from app.utils.ocr_processor import OCRProcessor
-from app.utils.file_utils import FileUtils
-from app.utils.export_utils import ExportUtils
-from app.config import settings
-from app.database.session import get_db
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi.responses import JSONResponse
+import os
+from datetime import datetime
+import uuid
 
+# Création du router
 router = APIRouter(prefix="/api/ocr", tags=["OCR"])
+
+@router.post("/enhanced-extract")
+async def enhanced_extract(file: UploadFile = File(...)):
+    # Votre code existant ici...
+    pass
+
 logger = logging.getLogger(__name__)
 
 # Initialiser le processeur OCR

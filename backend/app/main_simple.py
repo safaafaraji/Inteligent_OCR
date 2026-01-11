@@ -14,6 +14,10 @@ import re
 import json
 from typing import Dict, Any, List
 import uuid
+import tempfile
+import subprocess
+from app.services.image_processing import preprocess_image
+from app.services.extraction import extract_structured_data
 
 app = FastAPI(
     title="OCR Intelligent API",
@@ -140,17 +144,14 @@ async def get_current_user_endpoint(current_user: User = Depends(get_current_use
 def extract_text_from_image(image_bytes: bytes, language: str = "fra+eng") -> Dict[str, Any]:
     """Extrait le texte d'une image"""
     try:
-        image = Image.open(io.BytesIO(image_bytes))
-        
-        # Convertir en RGB si nécessaire
-        if image.mode != 'RGB':
-            image = image.convert('RGB')
+        # Preprocess image for better OCR
+        processed_image = preprocess_image(image_bytes)
         
         # Extraire le texte
-        text = pytesseract.image_to_string(image, lang=language)
+        text = pytesseract.image_to_string(processed_image, lang=language)
         
         # Extraire les données
-        data = pytesseract.image_to_data(image, lang=language, output_type=pytesseract.Output.DICT)
+        data = pytesseract.image_to_data(processed_image, lang=language, output_type=pytesseract.Output.DICT)
         
         # Calculer la confiance
         confidences = [int(c) for c in data['conf'] if int(c) > 0]
@@ -163,7 +164,14 @@ def extract_text_from_image(image_bytes: bytes, language: str = "fra+eng") -> Di
         }
         
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Erreur OCR: {str(e)}")
+        print(f"OCR Error: {e}")
+        # Fallback to simple extraction if preprocessing fails
+        try:
+            image = Image.open(io.BytesIO(image_bytes))
+            text = pytesseract.image_to_string(image, lang=language)
+            return {"text": text, "confidence": 0.5, "word_count": 0}
+        except Exception as e2:
+            raise HTTPException(status_code=400, detail=f"Erreur OCR: {str(e2)}")
 
 def extract_text_from_pdf(pdf_bytes: bytes, language: str = "fra+eng") -> List[Dict[str, Any]]:
     """Extrait le texte d'un PDF"""
@@ -186,6 +194,30 @@ def extract_text_from_pdf(pdf_bytes: bytes, language: str = "fra+eng") -> List[D
         
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Erreur PDF: {str(e)}")
+
+def extract_text_from_pages(file_bytes: bytes) -> str:
+    """Extrait le texte d'un fichier .pages via textutil (macOS only)"""
+    try:
+        with tempfile.NamedTemporaryFile(suffix='.pages', delete=False) as tmp:
+            tmp.write(file_bytes)
+            tmp_path = tmp.name
+            
+        try:
+            # textutil -convert txt input.pages -stdout
+            result = subprocess.run(
+                ['textutil', '-convert', 'txt', tmp_path, '-stdout'], 
+                capture_output=True, 
+                check=True
+            )
+            return result.stdout.decode('utf-8')
+        except subprocess.CalledProcessError:
+            return ""
+        finally:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+    except Exception as e:
+        print(f"Error converting .pages: {e}")
+        return ""
 
 def extract_personal_info(text: str) -> Dict[str, Any]:
     """Extrait les informations personnelles du texte"""
@@ -263,18 +295,17 @@ def detect_document_type(text: str, filename: str) -> str:
     filename_lower = filename.lower()
     
     # Détection basée sur les mots-clés
-    if any(word in text_lower for word in ['facture', 'invoice', 'montant', 'total', '€', '$']):
+    # Détection basée sur les mots-clés
+    if any(word in text_lower for word in ['facture', 'invoice', 'montant', 'total', 'tva', 'ttc']):
         return 'invoice'
-    elif any(word in text_lower for word in ['cv', 'curriculum', 'expérience', 'compétence']):
+    elif any(word in text_lower for word in ['cv', 'curriculum', 'expérience', 'compétence', 'education', 'skills']):
         return 'cv'
+    elif any(word in text_lower for word in ['exercice', 'exercise', 'question', 'réponse', 'devoir', 'homework']):
+        return 'exercise'
+    elif any(word in text_lower for word in ['essay', 'dissertation', 'thèse', 'introduction', 'conclusion', 'tpe']):
+        return 'essay'
     elif any(word in text_lower for word in ['contrat', 'contract', 'agreement', 'signature']):
         return 'contract'
-    elif any(word in text_lower for word in ['formulaire', 'form', 'nom', 'prénom', 'date']):
-        return 'form'
-    elif any(word in text_lower for word in ['lettre', 'letter', 'cher', 'madame', 'monsieur']):
-        return 'letter'
-    elif any(word in text_lower for word in ['reçu', 'receipt', 'ticket', 'caisse']):
-        return 'receipt'
     
     return 'document'
 
@@ -305,6 +336,11 @@ async def extract_ocr(
             for result in pdf_results:
                 all_text += f"--- Page {result['page']} ---\n{result['text']}\n\n"
                 pages.append(result)
+        elif file_ext == 'pages':
+            # Traitement .pages
+            text = extract_text_from_pages(content)
+            all_text = text
+            pages = [{"page": 1, "text": text, "confidence": 1.0}]
         else:
             # Traitement image
             result = extract_text_from_image(content, language)
@@ -317,8 +353,9 @@ async def extract_ocr(
         # Détection du type de document
         doc_type = detect_document_type(all_text, file.filename)
         
-        # Extraction des informations personnelles
-        personal_info = extract_personal_info(all_text)
+        # Extraction des informations personnelles et structurées
+        structured_data = extract_structured_data(all_text, doc_type)
+        personal_info = extract_personal_info(all_text) # Keep legacy function for backward compatibility if needed, or merge
         
         # Créer la réponse
         process_id = str(uuid.uuid4())
@@ -330,8 +367,11 @@ async def extract_ocr(
             "document_type": doc_type,
             "total_pages": len(pages),
             "text": all_text,
+            "text": all_text,
             "pages": pages,
-            "personal_info": personal_info,
+            "personal_info": personal_info, # Legacy
+            "structured_data": structured_data, # New detailed data
+            "average_confidence": sum(p.get('confidence', 0) for p in pages) / len(pages) if pages else 0,
             "average_confidence": sum(p.get('confidence', 0) for p in pages) / len(pages) if pages else 0,
             "processing_date": datetime.now().isoformat(),
             "user": current_user.username
@@ -434,11 +474,22 @@ async def download_results(
             writer.writerow(["Pages", result.get("total_pages", 0)])
             writer.writerow(["Confiance moyenne", f"{result.get('average_confidence', 0)*100:.1f}%"])
             
-            # Informations personnelles
-            personal_info = result.get("personal_info", {})
-            for key, values in personal_info.items():
-                if values:
-                    writer.writerow([f"Info - {key}", ", ".join(values) if isinstance(values, list) else values])
+            # Informations personnelles et structurées
+            structured_data = result.get("structured_data", {})
+            if structured_data:
+                 for key, value in structured_data.items():
+                    if isinstance(value, list):
+                        writer.writerow([f"Data - {key}", ", ".join(str(v) for v in value)])
+                    elif isinstance(value, dict):
+                         writer.writerow([f"Data - {key}", json.dumps(value, ensure_ascii=False)])
+                    else:
+                        writer.writerow([f"Data - {key}", str(value)])
+            else:
+                # Fallback old personal_info
+                personal_info = result.get("personal_info", {})
+                for key, values in personal_info.items():
+                    if values:
+                        writer.writerow([f"Info - {key}", ", ".join(values) if isinstance(values, list) else values])
             
             # Retourner le CSV
             from fastapi.responses import PlainTextResponse

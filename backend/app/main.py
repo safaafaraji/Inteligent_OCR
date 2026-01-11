@@ -4,9 +4,29 @@ from fastapi.staticfiles import StaticFiles
 import os
 from contextlib import asynccontextmanager
 
+from app.database import init_db
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.ocr import router as ocr_router
 from app.api.auth import router as auth_router
-from app.api.ocr_advanced import router as ocr_router
-from app.database.session import init_db
+
+app = FastAPI(title="OCR Intelligent API")
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Routes
+app.include_router(ocr_router)
+app.include_router(auth_router)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "ocr-intelligent-api"}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -136,3 +156,5 @@ if __name__ == "__main__":
         reload=True,
         log_level="info"
     )
+
+# Ne fait rien pour le moment
