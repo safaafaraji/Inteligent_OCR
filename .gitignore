@@ -1,33 +1,35 @@
-# Python
+# macOS fichiers système
 .DS_Store
+._.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python
 __pycache__/
-results/
 *.py[cod]
 *$py.class
-*.so
 .Python
 env/
 venv/
-ENV/
-build/
-dist/
+.venv/
 *.egg-info/
+dist/
+build/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Résultats et fichiers temporaires
+results/
+uploads/
+static/uploads/
+
+# Logs et fichiers de débogage
+*.log
+*.sqlite
+*.db
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Data
-data/input/*
-data/output/*
-!data/input/.gitkeep
-!data/output/.gitkeep
-
-# Logs
-*.log
