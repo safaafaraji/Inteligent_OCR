@@ -146,7 +146,7 @@ Ouvrez simplement le fichier `frontend/index.html` dans votre navigateur.
 Simulateur développé dans le cadre d'un projet académique d'émulation de microprocesseur.
 
 "Développer pour comprendre, apprendre pour avancer"
----
+
 
 ## 📝 Licence
 Ce projet est sous licence MIT.
