@@ -43,6 +43,12 @@ class UserLogin(BaseModel):
     username: str
     password: str
 
+class UserRegister(BaseModel):
+    username: str
+    email: str
+    password: str
+    full_name: Optional[str] = None
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -78,7 +84,7 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-# Initialiser l'utilisateur démo
+# Initialiser les utilisateurs
 demo_user = {
     "id": 1,
     "username": "demo",
@@ -88,6 +94,17 @@ demo_user = {
     "is_active": True
 }
 users_db["demo"] = demo_user
+
+# Utilisateur personnalisé
+safaa_user = {
+    "id": 2,
+    "username": "safaafaraji01@gmail.com",
+    "email": "safaafaraji01@gmail.com",
+    "full_name": "Safaa Faraji",
+    "hashed_password": get_password_hash("safae"),
+    "is_active": True
+}
+users_db["safaafaraji01@gmail.com"] = safaa_user
 
 # Dépendance pour l'authentification
 async def get_current_user(authorization: Optional[str] = Header(None)):
@@ -133,6 +150,29 @@ async def login(user_data: UserLogin):
         raise HTTPException(status_code=401, detail="Identifiants incorrects")
     
     access_token = create_access_token(data={"sub": user["username"]})
+    return Token(access_token=access_token, token_type="bearer")
+
+@app.post("/api/auth/register", response_model=Token)
+async def register(user_data: UserRegister):
+    """Inscription d'un nouvel utilisateur"""
+    # Vérifier si l'utilisateur existe déjà
+    if user_data.username in users_db or user_data.email in [u["email"] for u in users_db.values()]:
+        raise HTTPException(status_code=400, detail="Cet utilisateur ou email existe déjà")
+    
+    # Créer le nouvel utilisateur
+    new_user = {
+        "id": len(users_db) + 1,
+        "username": user_data.username,
+        "email": user_data.email,
+        "full_name": user_data.full_name or user_data.username,
+        "hashed_password": get_password_hash(user_data.password),
+        "is_active": True
+    }
+    
+    users_db[user_data.username] = new_user
+    
+    # Créer et retourner un token
+    access_token = create_access_token(data={"sub": user_data.username})
     return Token(access_token=access_token, token_type="bearer")
 
 @app.get("/api/auth/me", response_model=User)

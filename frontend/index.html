@@ -4,476 +4,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intelligent OCR - AI Powered</title>
+    <title>OCR Intelligent - Accueil</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1c2e 0%, #303554 100%);
-            color: #e2e8f0;
-            min-height: 100vh;
-        }
-
-        /* Glassmorphism Classes */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-panel {
-            background: rgba(30, 32, 47, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-
-        .gradient-text {
-            background: linear-gradient(to right, #60a5fa, #c084fc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Animations */
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
-        }
-
-        .floating {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .slide-up {
-            animation: slideUp 0.5s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-    </style>
 </head>
 
-<body class="selection:bg-indigo-500 selection:text-white">
-
-    <!-- Background Elements -->
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/20 rounded-full blur-[120px]">
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="glass sticky top-0 z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <i class="fas fa-eye text-white text-lg"></i>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-alt text-white text-xl"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900">OCR Intelligent</h1>
                 </div>
-                <span class="text-2xl font-bold tracking-tight">Intelligent<span class="gradient-text">OCR</span></span>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <div id="userStatus" class="hidden flex items-center gap-3 px-4 py-2 rounded-full glass">
-                    <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
-                    <span id="username" class="text-sm font-medium text-gray-300"></span>
+                <div>
+                    <a href="login.html"
+                        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Connexion
+                    </a>
                 </div>
-                <button id="authBtn"
-                    class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all font-medium text-sm flex items-center gap-2 border border-white/10">
-                    <i class="fas fa-sign-in-alt"></i> <span>Login</span>
-                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-6 py-12">
-
-        <!-- Hero Section -->
-        <div class="text-center mb-16 slide-up" style="animation-delay: 0.1s">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Extract Intelligence from <br>
-                <span class="gradient-text">Any Document</span>
-            </h1>
-            <p class="text-lg text-gray-400 max-w-2xl mx-auto">
-                Next-generation OCR powered by AI. Drag & drop CVs, Invoices, Essays, or .pages files.
-                We extract structured data instantly.
+    <!-- Hero Section -->
+    <main class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold text-gray-900 mb-6">
+                Extraction Intelligente de Documents
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                Transformez vos documents scannés en données structurées grâce à notre technologie OCR avancée.
+                Supportez les CV, factures, et bien plus encore.
             </p>
-        </div>
-
-        <!-- Upload Zone -->
-        <div id="uploadContainer" class="max-w-3xl mx-auto slide-up" style="animation-delay: 0.2s">
-            <div id="dropZone"
-                class="glass-panel rounded-3xl p-12 text-center border-2 border-dashed border-indigo-500/30 hover:border-indigo-500/60 transition-all cursor-pointer group relative overflow-hidden">
-                <input type="file" id="fileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif,.pages">
-
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity">
-                </div>
-
-                <div class="relative z-10 space-y-6">
-                    <div
-                        class="w-20 h-20 mx-auto rounded-full bg-indigo-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 floating">
-                        <i class="fas fa-cloud-upload-alt text-4xl text-indigo-400"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-2 text-white">Drop your file here</h3>
-                        <p class="text-gray-400">or click to browse</p>
-                    </div>
-                    <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
-                        <span class="px-2 py-1 rounded bg-white/5">PDF</span>
-                        <span class="px-2 py-1 rounded bg-white/5">IMG</span>
-                        <span class="px-2 py-1 rounded bg-white/5">.pages</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pre-process Options -->
-            <div class="mt-8 flex justify-center gap-4">
-                <div class="glass px-4 py-2 rounded-xl flex items-center gap-2">
-                    <i class="fas fa-language text-gray-400"></i>
-                    <select id="languageSelect"
-                        class="bg-transparent border-none text-sm focus:ring-0 cursor-pointer text-gray-300">
-                        <option value="fra+eng" class="bg-gray-800">🇫🇷 Français + 🇺🇸 Eng</option>
-                        <option value="eng" class="bg-gray-800">🇺🇸 English</option>
-                        <option value="fra" class="bg-gray-800">🇫🇷 Français</option>
-                    </select>
-                </div>
+            <div class="flex justify-center gap-4">
+                <a href="login.html"
+                    class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+                    Commencer maintenant
+                </a>
+                <a href="#features"
+                    class="bg-white text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold border-2 border-blue-600 hover:bg-blue-50 transition">
+                    En savoir plus
+                </a>
             </div>
         </div>
 
-        <!-- Processing State -->
-        <div id="processingState" class="hidden max-w-lg mx-auto mt-12 text-center">
-            <div class="relative w-24 h-24 mx-auto mb-6">
-                <div class="absolute inset-0 rounded-full border-4 border-indigo-500/30"></div>
-                <div class="absolute inset-0 rounded-full border-t-4 border-indigo-500 animate-spin"></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <i class="fas fa-magic text-2xl text-indigo-400 animate-pulse"></i>
+        <!-- Features -->
+        <div id="features" class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-robot text-blue-600 text-2xl"></i>
                 </div>
-            </div>
-            <h3 class="text-xl font-semibold mb-2">Analyzing Document...</h3>
-            <p class="text-gray-400 text-sm">Detecting structure, entities, and extracting text</p>
-        </div>
-
-        <!-- Results Section -->
-        <div id="resultsSection" class="hidden mt-16 space-y-8 slide-up">
-
-            <!-- Summary Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="glass-panel p-6 rounded-2xl">
-                    <div class="text-gray-400 text-sm mb-1">Document Type</div>
-                    <div id="resDocType" class="text-xl font-bold text-white capitalize">Invoice</div>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl">
-                    <div class="text-gray-400 text-sm mb-1">Confidence</div>
-                    <div id="resConfidence" class="text-xl font-bold text-emerald-400">98.5%</div>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl">
-                    <div class="text-gray-400 text-sm mb-1">Pages</div>
-                    <div id="resPages" class="text-xl font-bold text-white">2</div>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl">
-                    <div class="text-gray-400 text-sm mb-1">Processing ID</div>
-                    <div id="resId" class="text-sm font-mono text-gray-300 truncate">#12345...</div>
-                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">IA Avancée</h3>
+                <p class="text-gray-600">
+                    Reconnaissance intelligente des types de documents (CV, Factures, Contrats) avec extraction
+                    automatique des données clés.
+                </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Data Extraction Column -->
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="glass-panel rounded-3xl overflow-hidden">
-                        <div class="p-6 border-b border-white/10 flex justify-between items-center">
-                            <h3 class="text-lg font-semibold flex items-center gap-2">
-                                <i class="fas fa-database text-indigo-400"></i> Structured Data
-                            </h3>
-                            <div class="flex gap-2">
-                                <button onclick="downloadResult('json')"
-                                    class="px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 text-xs font-medium transition-colors">
-                                    <i class="fas fa-download mr-1"></i> JSON
-                                </button>
-                                <button onclick="downloadResult('csv')"
-                                    class="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-medium transition-colors">
-                                    <i class="fas fa-table mr-1"></i> CSV
-                                </button>
-                            </div>
-                        </div>
-                        <div id="structuredDataContainer" class="p-6 space-y-4">
-                            <!-- Dynamic Content Here -->
-                        </div>
-                    </div>
-
-                    <!-- Raw Text -->
-                    <div class="glass-panel rounded-3xl overflow-hidden">
-                        <button onclick="toggleRawText()"
-                            class="w-full p-6 flex justify-between items-center hover:bg-white/5 transition-colors">
-                            <h3 class="text-lg font-semibold flex items-center gap-2">
-                                <i class="fas fa-align-left text-gray-400"></i> Raw Text Extraction
-                            </h3>
-                            <i id="rawTextArrow" class="fas fa-chevron-down text-gray-400 transition-transform"></i>
-                        </button>
-                        <div id="rawTextContainer" class="hidden border-t border-white/10 bg-black/20">
-                            <pre id="rawTextContent"
-                                class="p-6 text-sm text-gray-300 font-mono whitespace-pre-wrap overflow-x-auto max-h-96"></pre>
-                        </div>
-                    </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-language text-green-600 text-2xl"></i>
                 </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Multilingue</h3>
+                <p class="text-gray-600">
+                    Support complet du français, anglais, espagnol et bien d'autres langues pour une reconnaissance
+                    optimale.
+                </p>
+            </div>
 
-                <!-- Preview Column (Optional/Placeholder for future) -->
-                <div class="space-y-6">
-                    <div class="glass-panel p-6 rounded-3xl">
-                        <h3 class="text-sm font-medium text-gray-400 mb-4 uppercase tracking-wider">File Info</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="text-xs text-gray-500 mb-1">Filename</div>
-                                <div id="resFilename" class="text-sm text-white break-all">document.pdf</div>
-                            </div>
-                            <div>
-                                <div class="text-xs text-gray-500 mb-1">Date</div>
-                                <div id="resDate" class="text-sm text-white">2024-01-20</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="resetUI()"
-                        class="w-full py-4 rounded-xl border border-white/10 hover:bg-white/5 text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-redo-alt"></i> Process New File
-                    </button>
-
-                    <div id="errorZone"
-                        class="hidden p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm">
-                        <i class="fas fa-exclamation-circle mr-2"></i> <span id="errorMessage">Error text</span>
-                    </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-download text-purple-600 text-2xl"></i>
                 </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Export Facile</h3>
+                <p class="text-gray-600">
+                    Exportez vos résultats en JSON, CSV ou texte brut en un seul clic pour une intégration simplifiée.
+                </p>
             </div>
         </div>
 
+        <!-- Document Types -->
+        <div class="mt-20">
+            <h3 class="text-3xl font-bold text-gray-900 text-center mb-12">Types de Documents Supportés</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition">
+                    <i class="fas fa-file-invoice text-4xl text-blue-600 mb-3"></i>
+                    <p class="font-semibold text-gray-900">Factures</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition">
+                    <i class="fas fa-id-card text-4xl text-green-600 mb-3"></i>
+                    <p class="font-semibold text-gray-900">CV</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition">
+                    <i class="fas fa-file-contract text-4xl text-purple-600 mb-3"></i>
+                    <p class="font-semibold text-gray-900">Contrats</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition">
+                    <i class="fas fa-file-alt text-4xl text-orange-600 mb-3"></i>
+                    <p class="font-semibold text-gray-900">Formulaires</p>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <script>
-        // API Configuration
-        const API_URL = 'http://localhost:8000/api';
-        let authToken = null;
-        let currentProcessId = null;
-
-        // --- Auth Logic ---
-        async function checkAuth() {
-            // Auto login with demo for this prototype
-            try {
-                const res = await fetch(`${API_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: 'demo', password: 'demo123' })
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    authToken = data.access_token;
-                    updateAuthUI('demo');
-                }
-            } catch (e) { console.error("Auth failed", e); }
-        }
-
-        function updateAuthUI(user) {
-            document.getElementById('userStatus').classList.remove('hidden');
-            document.getElementById('userStatus').classList.add('flex');
-            document.getElementById('username').textContent = user;
-            document.getElementById('authBtn').innerHTML = '<i class="fas fa-sign-out-alt"></i> <span>Logout</span>';
-            document.getElementById('authBtn').onclick = () => location.reload();
-        }
-
-        // --- File Handling ---
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-
-        dropZone.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        dropZone.addEventListener('dragover', () => dropZone.classList.add('border-indigo-500'));
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500'));
-        dropZone.addEventListener('drop', (e) => {
-            dropZone.classList.remove('border-indigo-500');
-            handleFile(e.dataTransfer.files[0]);
-        });
-
-        async function handleFile(file) {
-            if (!file || !authToken) {
-                if (!authToken) showError("Authenticating... Please try again in a second.");
-                return;
-            }
-
-            // UI State
-            document.getElementById('uploadContainer').classList.add('hidden');
-            document.getElementById('processingState').classList.remove('hidden');
-            document.getElementById('errorZone').classList.add('hidden');
-
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('language', document.getElementById('languageSelect').value);
-
-            try {
-                const response = await fetch(`${API_URL}/ocr/extract`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${authToken}` },
-                    body: formData
-                });
-
-                if (!response.ok) throw new Error((await response.json()).detail || "Processing failed");
-
-                const result = await response.json();
-                currentProcessId = result.process_id;
-                renderResults(result);
-
-            } catch (error) {
-                showError(error.message);
-                resetUI();
-            }
-        }
-
-        // --- Rendering Results ---
-        function renderResults(data) {
-            document.getElementById('processingState').classList.add('hidden');
-            document.getElementById('resultsSection').classList.remove('hidden');
-
-            // Header Info
-            document.getElementById('resDocType').textContent = data.document_type || 'Unknown';
-            document.getElementById('resConfidence').textContent = `${(data.average_confidence * 100).toFixed(1)}%`;
-            document.getElementById('resPages').textContent = data.total_pages;
-            document.getElementById('resId').textContent = data.process_id;
-            document.getElementById('resFilename').textContent = data.filename;
-            document.getElementById('resDate').textContent = new Date().toLocaleDateString();
-
-            // Structured Data Rendering
-            const container = document.getElementById('structuredDataContainer');
-            container.innerHTML = '';
-
-            const structData = data.structured_data || {};
-            const keys = Object.keys(structData);
-
-            if (keys.length === 0) {
-                container.innerHTML = '<div class="text-gray-400 italic">No structured data found for this document type.</div>';
-            } else {
-                keys.forEach(key => {
-                    const value = structData[key];
-                    if (!value || (Array.isArray(value) && value.length === 0)) return;
-
-                    const row = document.createElement('div');
-                    row.className = "flex flex-col sm:flex-row border-b border-white/5 pb-3 last:border-0";
-
-                    const label = document.createElement('div');
-                    label.className = "text-indigo-300 text-sm font-medium sm:w-1/3 mb-1 sm:mb-0 capitalize";
-                    label.textContent = key.replace(/_/g, ' ');
-
-                    const valDiv = document.createElement('div');
-                    valDiv.className = "text-gray-200 text-sm sm:w-2/3 break-words";
-
-                    if (Array.isArray(value)) {
-                        valDiv.innerHTML = value.map(v => `<span class="inline-block bg-white/10 px-2 py-1 rounded mr-2 mb-1 text-xs">${v}</span>`).join('');
-                    } else {
-                        valDiv.textContent = value;
-                    }
-
-                    row.appendChild(label);
-                    row.appendChild(valDiv);
-                    container.appendChild(row);
-                });
-            }
-
-            // Raw Text
-            document.getElementById('rawTextContent').textContent = data.text;
-        }
-
-        // --- Utils ---
-        function toggleRawText() {
-            const container = document.getElementById('rawTextContainer');
-            const arrow = document.getElementById('rawTextArrow');
-            container.classList.toggle('hidden');
-            arrow.style.transform = container.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-        }
-
-        async function downloadResult(format) {
-            if (!currentProcessId) return;
-            try {
-                const res = await fetch(`${API_URL}/ocr/download/${currentProcessId}/${format}`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                const blob = await res.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `ocr_result_${currentProcessId}.${format}`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-            } catch (e) {
-                showError("Download failed");
-            }
-        }
-
-        function resetUI() {
-            document.getElementById('resultsSection').classList.add('hidden');
-            document.getElementById('uploadContainer').classList.remove('hidden');
-            document.getElementById('processingState').classList.add('hidden');
-            fileInput.value = '';
-        }
-
-        function showError(msg) {
-            const el = document.getElementById('errorZone');
-            const msgEl = document.getElementById('errorMessage');
-            el.classList.remove('hidden');
-            msgEl.textContent = msg;
-            setTimeout(() => el.classList.add('hidden'), 5000);
-        }
-
-        // Init
-        document.addEventListener('DOMContentLoaded', checkAuth);
-
-    </script>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400">&copy; 2024 OCR Intelligent. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

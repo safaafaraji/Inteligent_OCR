@@ -1,296 +1,326 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historique - OCR Intelligent</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <a href="index.html" class="flex items-center space-x-3">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <h1 class="text-2xl font-bold text-gray-900">OCR Intelligent</h1>
-                    </a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="upload.html" class="text-sm font-medium text-gray-700 hover:text-gray-900">
-                        <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        Nouveau
-                    </a>
-                    <a href="history.html" class="text-sm font-medium text-gray-700 hover:text-gray-900 bg-blue-50 px-3 py-1 rounded-md">
-                        Historique
-                    </a>
-                    <div class="relative group">
-                        <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-                            <span data-user="username">Utilisateur</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-                            <a href="history.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Historique</a>
-                            <a href="#" data-logout class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</a>
-                        </div>
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-alt text-white text-xl"></i>
                     </div>
+                    <h1 class="text-2xl font-bold text-gray-900">OCR Intelligent</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="upload.html"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i>Nouveau document
+                    </a>
+                    <span id="usernameDisplay" class="text-gray-700 font-medium"></span>
+                    <button onclick="logout()"
+                        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <!-- Header Section -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
         <div class="mb-8">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900">Historique des traitements</h2>
-                    <p class="mt-2 text-gray-600">Consultez vos documents traités et leurs résultats</p>
-                </div>
-                <div class="flex space-x-3">
-                    <button onclick="refreshHistory()" 
-                            class="export-button">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                        </svg>
-                        Actualiser
-                    </button>
-                    <button onclick="exportAll()" 
-                            class="export-button">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        Exporter tout
-                    </button>
-                </div>
-            </div>
+            <h2 class="text-3xl font-bold text-gray-900">Historique des documents</h2>
+            <p class="mt-2 text-gray-600">Consultez tous vos documents traités</p>
         </div>
 
-        <!-- Filters -->
-        <div class="mb-6">
-            <div class="bg-white rounded-lg shadow-sm p-4">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Statut</label>
-                        <select id="statusFilter" class="form-input" onchange="filterHistory()">
-                            <option value="all">Tous les statuts</option>
-                            <option value="completed">Terminé</option>
-                            <option value="processing">En cours</option>
-                            <option value="failed">Échoué</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                        <select id="typeFilter" class="form-input" onchange="filterHistory()">
-                            <option value="all">Tous les types</option>
-                            <option value="invoice">Facture</option>
-                            <option value="receipt">Reçu</option>
-                            <option value="contract">Contrat</option>
-                            <option value="form">Formulaire</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Période</label>
-                        <select id="periodFilter" class="form-input" onchange="filterHistory()">
-                            <option value="all">Toute période</option>
-                            <option value="today">Aujourd'hui</option>
-                            <option value="week">Cette semaine</option>
-                            <option value="month">Ce mois</option>
-                            <option value="year">Cette année</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Recherche</label>
-                        <div class="relative">
-                            <input type="text" id="searchInput" 
-                                   class="form-input pl-10" 
-                                   placeholder="Nom du fichier..."
-                                   oninput="debouncedSearch()">
-                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
+        <!-- Loading -->
+        <div id="loadingSection" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+            <p class="text-gray-600">Chargement de l'historique...</p>
+        </div>
+
+        <!-- Error -->
+        <div id="errorSection" class="hidden bg-red-50 border border-red-200 rounded-lg p-6 text-red-800">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span id="errorMessage"></span>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptySection" class="hidden bg-white rounded-xl shadow-sm p-12 text-center">
+            <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">Aucun document traité</h3>
+            <p class="text-gray-500 mb-6">Commencez par traiter votre premier document</p>
+            <a href="upload.html" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                <i class="fas fa-upload mr-2"></i>Télécharger un document
+            </a>
+        </div>
+
+        <!-- History List -->
+        <div id="historySection" class="hidden">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-file-alt text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Total documents</p>
+                            <p class="text-2xl font-bold" id="totalDocs">0</p>
                         </div>
                     </div>
                 </div>
-                <div class="mt-4 flex justify-between">
-                    <div>
-                        <button onclick="clearFilters()" 
-                                class="text-sm text-gray-600 hover:text-gray-900">
-                            Réinitialiser les filtres
-                        </button>
+
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-id-card text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">CVs</p>
+                            <p class="text-2xl font-bold" id="totalCVs">0</p>
+                        </div>
                     </div>
-                    <div class="text-sm text-gray-500">
-                        <span id="resultsCount">0</span> résultats
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-file-invoice text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Factures</p>
+                            <p class="text-2xl font-bold" id="totalInvoices">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-file text-orange-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Autres</p>
+                            <p class="text-2xl font-bold" id="totalOthers">0</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Stats Cards -->
-        <div class="mb-8 grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="stats-card">
-                <div class="stat-value" id="totalDocuments">0</div>
-                <div class="stat-label">Documents totaux</div>
-            </div>
-            <div class="stats-card">
-                <div class="stat-value" id="successRate">0%</div>
-                <div class="stat-label">Taux de réussite</div>
-            </div>
-            <div class="stats-card">
-                <div class="stat-value" id="avgProcessingTime">0s</div>
-                <div class="stat-label">Temps moyen</div>
-            </div>
-            <div class="stats-card">
-                <div class="stat-value" id="totalPages">0</div>
-                <div class="stat-label">Pages traitées</div>
-            </div>
-        </div>
-
-        <!-- Results Table -->
-        <div class="bg-white rounded-lg shadow-sm">
-            <!-- Table -->
-            <div class="table-container">
-                <table class="styled-table">
-                    <thead>
+            <!-- Documents Table -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th>Document</th>
-                            <th>Type</th>
-                            <th>Statut</th>
-                            <th>Confiance</th>
-                            <th>Date</th>
-                            <th>Temps</th>
-                            <th>Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Document</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Confiance</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="historyTable">
-                        <!-- Les données seront injectées ici -->
+                    <tbody id="historyTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Dynamic content -->
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden text-center py-12">
-                <div class="inline-block">
-                    <svg class="w-12 h-12 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <h3 class="mt-4 text-lg font-medium text-gray-900">Aucun document traité</h3>
-                    <p class="mt-2 text-gray-600">Commencez par traiter votre premier document</p>
-                    <div class="mt-6">
-                        <a href="upload.html" 
-                           class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700">
-                            Télécharger un document
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Loading State -->
-            <div id="loadingState" class="text-center py-12">
-                <div class="inline-block">
-                    <svg class="w-12 h-12 text-blue-600 spinner" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                    <p class="mt-4 text-gray-600">Chargement de l'historique...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div id="pagination" class="mt-6 hidden">
-            <div class="flex items-center justify-between">
-                <div class="flex-1 flex justify-between sm:hidden">
-                    <button onclick="prevPage()" 
-                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        Précédent
-                    </button>
-                    <button onclick="nextPage()" 
-                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        Suivant
-                    </button>
-                </div>
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-sm text-gray-700">
-                            Page <span id="currentPage">1</span> sur <span id="totalPages">1</span>
-                            (<span id="totalItems">0</span> résultats)
-                        </p>
-                    </div>
-                    <div>
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                            <button onclick="prevPage()" 
-                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Précédent</span>
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-                            <div id="pageButtons" class="flex">
-                                <!-- Les boutons de page seront injectés ici -->
-                            </div>
-                            <button onclick="nextPage()" 
-                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Suivant</span>
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        </nav>
-                    </div>
-                </div>
             </div>
         </div>
     </main>
 
-    <!-- Delete Modal -->
-    <div id="deleteModal" class="modal-overlay hidden">
-        <div class="modal-content w-11/12 max-w-md">
-            <div class="p-6">
-                <div class="flex items-center mb-4">
-                    <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.998-.833-2.732 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900">Supprimer le document</h3>
-                        <p class="text-sm text-gray-500">Cette action est irréversible</p>
-                    </div>
-                </div>
-                <p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir supprimer ce document et tous ses résultats associés ?</p>
-                <div class="flex justify-end space-x-3">
-                    <button onclick="closeDeleteModal()" 
-                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                        Annuler
-                    </button>
-                    <button onclick="confirmDelete()" 
-                            class="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700">
-                        Supprimer
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let authToken = localStorage.getItem('ocr_token');
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-12">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <p class="text-gray-400 text-sm">&copy; 2024 OCR Intelligent. Tous droits réservés.</p>
-            </div>
-        </div>
-    </footer>
+        // Check auth
+        if (!authToken) {
+            window.location.href = 'login.html';
+        }
 
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/history.js"></script>
+        // Display username
+        document.getElementById('usernameDisplay').textContent = localStorage.getItem('ocr_user') || 'Utilisateur';
+
+        // Load history on page load
+        loadHistory();
+
+        async function loadHistory() {
+            try {
+                const response = await fetch(`${API_URL}/ocr/history`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur de chargement de l\'historique');
+                }
+
+                const data = await response.json();
+                displayHistory(data);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loadingSection').classList.add('hidden');
+            }
+        }
+
+        function displayHistory(data) {
+            const history = data.history || [];
+
+            if (history.length === 0) {
+                document.getElementById('emptySection').classList.remove('hidden');
+                return;
+            }
+
+            // Calculate stats
+            const stats = {
+                total: history.length,
+                cvs: history.filter(h => h.document_type?.toLowerCase() === 'cv').length,
+                invoices: history.filter(h => h.document_type?.toLowerCase() === 'invoice').length,
+                others: 0
+            };
+            stats.others = stats.total - stats.cvs - stats.invoices;
+
+            document.getElementById('totalDocs').textContent = stats.total;
+            document.getElementById('totalCVs').textContent = stats.cvs;
+            document.getElementById('totalInvoices').textContent = stats.invoices;
+            document.getElementById('totalOthers').textContent = stats.others;
+
+            // Display table
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = '';
+
+            history.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+
+                const docTypeIcon = getDocTypeIcon(item.document_type);
+                const docTypeColor = getDocTypeColor(item.document_type);
+                const confidence = (item.average_confidence * 100).toFixed(1);
+                const date = new Date(item.timestamp).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <i class="fas ${docTypeIcon} text-${docTypeColor}-600 mr-3"></i>
+                            <div>
+                                <div class="text-sm font-medium text-gray-900">${item.filename || 'Document ' + (index + 1)}</div>
+                                <div class="text-sm text-gray-500">${item.total_pages || 1} page(s)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-${docTypeColor}-100 text-${docTypeColor}-800 capitalize">
+                            ${item.document_type || 'Inconnu'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${date}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-full bg-gray-200 rounded-full h-2 mr-2" style="width: 100px;">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: ${confidence}%"></div>
+                            </div>
+                            <span class="text-sm text-gray-600">${confidence}%</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="downloadDoc('${item.process_id}', 'json')" class="text-blue-600 hover:text-blue-900 mr-3" title="Télécharger JSON">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button onclick="downloadDoc('${item.process_id}', 'csv')" class="text-green-600 hover:text-green-900 mr-3" title="Télécharger CSV">
+                            <i class="fas fa-file-csv"></i>
+                        </button>
+                        <button onclick="viewDoc('${item.process_id}')" class="text-purple-600 hover:text-purple-900" title="Voir les détails">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('historySection').classList.remove('hidden');
+        }
+
+        async function downloadDoc(processId, format) {
+            try {
+                const response = await fetch(`${API_URL}/ocr/download/${processId}/${format}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ocr_${processId}.${format}`;
+                a.click();
+            } catch (error) {
+                alert('Erreur de téléchargement');
+            }
+        }
+
+        function viewDoc(processId) {
+            // Store the process ID and redirect to results page
+            localStorage.setItem('view_process_id', processId);
+            window.location.href = `results.html?id=${processId}`;
+        }
+
+        function getDocTypeIcon(type) {
+            const icons = {
+                'cv': 'fa-id-card',
+                'invoice': 'fa-file-invoice',
+                'facture': 'fa-file-invoice',
+                'contract': 'fa-file-contract',
+                'essay': 'fa-book',
+                'exercise': 'fa-pen'
+            };
+            return icons[type?.toLowerCase()] || 'fa-file-alt';
+        }
+
+        function getDocTypeColor(type) {
+            const colors = {
+                'cv': 'green',
+                'invoice': 'purple',
+                'facture': 'purple',
+                'contract': 'blue',
+                'essay': 'orange',
+                'exercise': 'red'
+            };
+            return colors[type?.toLowerCase()] || 'gray';
+        }
+
+        function showError(message) {
+            document.getElementById('errorSection').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        function logout() {
+            localStorage.removeItem('ocr_token');
+            localStorage.removeItem('ocr_user');
+            window.location.href = 'login.html';
+        }
+    </script>
 </body>
+
 </html>

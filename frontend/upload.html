@@ -1,240 +1,309 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Téléchargement - OCR Intelligent</title>
+    <title>Upload - OCR Intelligent</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <a href="index.html" class="flex items-center space-x-3">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <h1 class="text-2xl font-bold text-gray-900">OCR Intelligent</h1>
-                    </a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="relative group">
-                        <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-                            <span data-user="username">Utilisateur</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
-                            <a href="history.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Historique</a>
-                            <a href="#" data-logout class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</a>
-                        </div>
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-alt text-white text-xl"></i>
                     </div>
-                    <a href="upload.html" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
-                        Nouveau document
-                    </a>
+                    <h1 class="text-2xl font-bold text-gray-900">OCR Intelligent</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="usernameDisplay" class="text-gray-700 font-medium"></span>
+                    <button onclick="logout()"
+                        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <main class="max-w-5xl mx-auto px-4 py-8">
         <div class="mb-8">
             <h2 class="text-3xl font-bold text-gray-900">Télécharger un document</h2>
-            <p class="mt-2 text-gray-600">Sélectionnez un document à analyser. Formats supportés : PDF, JPG, PNG, TIFF.</p>
+            <p class="mt-2 text-gray-600">Formats support és : PDF, JPG, PNG, TIFF, .pages</p>
         </div>
 
-        <!-- Upload Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Upload Zone -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <!-- Upload Zone -->
-                    <div id="uploadZone" class="upload-zone">
-                        <input type="file" id="fileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif" multiple>
-                        <div class="text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                            </svg>
-                            <div class="mt-4">
-                                <p class="text-lg font-medium text-gray-900">
-                                    Glissez-déposez vos fichiers ici
-                                </p>
-                                <p class="mt-1 text-sm text-gray-500">
-                                    ou cliquez pour sélectionner
-                                </p>
-                            </div>
-                            <p class="mt-2 text-xs text-gray-500">
-                                PDF, JPG, PNG, TIFF jusqu'à 10 Mo
-                            </p>
-                        </div>
-                    </div>
+        <!-- Upload Zone -->
+        <div class="bg-white rounded-xl shadow-sm p-8 mb-6">
+            <div id="dropZone"
+                class="border-2 border-dashed border-blue-300 rounded-xl p-12 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition">
+                <input type="file" id="fileInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif,.pages">
+                <i class="fas fa-cloud-upload-alt text-5xl text-blue-500 mb-4"></i>
+                <p class="text-xl font-semibold text-gray-700 mb-2">Glissez-déposez votre fichier</p>
+                <p class="text-gray-600">ou cliquez pour sélectionner</p>
+                <p class="text-sm text-gray-500 mt-4">PDF, JPG, PNG, TIFF, .pages - max 10MB</p>
+            </div>
 
-                    <!-- Progress Bar -->
-                    <div id="progressContainer" class="hidden mt-6">
-                        <div class="flex justify-between text-sm text-gray-600 mb-2">
-                            <span id="progressText">Téléchargement...</span>
-                            <span id="progressPercent">0%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
-                        </div>
+            <div id="fileInfo" class="hidden mt-6 p-4 bg-blue-50 rounded-lg">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium" id="fileName"></p>
+                        <p class="text-sm text-gray-600" id="fileSize"></p>
                     </div>
-
-                    <!-- File List -->
-                    <div id="fileList" class="mt-6 space-y-3"></div>
-
-                    <!-- OCR Options -->
-                    <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Options OCR</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Langue de reconnaissance
-                                </label>
-                                <select id="languageSelect" class="form-input">
-                                    <option value="fra+eng">Français + Anglais</option>
-                                    <option value="fra">Français</option>
-                                    <option value="eng">Anglais</option>
-                                    <option value="spa">Espagnol</option>
-                                    <option value="deu">Allemand</option>
-                                    <option value="ita">Italien</option>
-                                    <option value="fra+eng+deu">Français + Anglais + Allemand</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Type de document
-                                </label>
-                                <select id="documentType" class="form-input">
-                                    <option value="auto">Détection automatique</option>
-                                    <option value="invoice">Facture</option>
-                                    <option value="receipt">Reçu</option>
-                                    <option value="contract">Contrat</option>
-                                    <option value="form">Formulaire</option>
-                                    <option value="letter">Lettre</option>
-                                    <option value="report">Rapport</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="mt-8 flex justify-end space-x-4">
-                        <button onclick="window.location.href='history.html'" 
-                                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                            Annuler
-                        </button>
-                        <button id="processButton" 
-                                class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled>
-                            Démarrer l'analyse
-                        </button>
-                    </div>
+                    <button onclick="removeFile()" class="text-red-600 hover:text-red-800">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="lg:col-span-1">
-                <!-- Tips -->
-                <div class="bg-blue-50 rounded-lg p-6 mb-6">
-                    <h3 class="text-lg font-medium text-blue-900 mb-4">
-                        <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Conseils pour une meilleure reconnaissance
-                    </h3>
-                    <ul class="space-y-3 text-sm text-blue-800">
-                        <li class="flex items-start">
-                            <svg class="w-4 h-4 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Utilisez des documents bien éclairés et nets
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-4 h-4 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Évitez les plis et les ombres
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-4 h-4 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Positionnez le texte à l'horizontale
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-4 h-4 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Choisissez la langue adaptée au document
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Supported Formats -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Formats supportés</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-red-100 rounded-md flex items-center justify-center mr-3">
-                                    <span class="text-red-600 font-medium">PDF</span>
-                                </div>
-                                <span class="text-sm text-gray-600">Document PDF</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Recommandé</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-blue-100 rounded-md flex items-center justify-center mr-3">
-                                    <span class="text-blue-600 font-medium">JPG</span>
-                                </div>
-                                <span class="text-sm text-gray-600">Image JPEG</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-green-100 rounded-md flex items-center justify-center mr-3">
-                                    <span class="text-green-600 font-medium">PNG</span>
-                                </div>
-                                <span class="text-sm text-gray-600">Image PNG</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-purple-100 rounded-md flex items-center justify-center mr-3">
-                                    <span class="text-purple-600 font-medium">TIFF</span>
-                                </div>
-                                <span class="text-sm text-gray-600">Image TIFF</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-6 border-t border-gray-200">
-                        <p class="text-sm text-gray-500">
-                            <strong>Limite :</strong> 10 Mo par fichier<br>
-                            <strong>Recommandé :</strong> Résolution 300 DPI minimum
-                        </p>
-                    </div>
+            <!-- Options -->
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Langue</label>
+                    <select id="languageSelect" class="w-full border border-gray-300 rounded-lg p-2">
+                        <option value="fra+eng">Français + Anglais</option>
+                        <option value="fra">Français</option>
+                        <option value="eng">Anglais</option>
+                    </select>
                 </div>
             </div>
+
+            <!-- Buttons -->
+            <div class="mt-6 flex gap-4">
+                <button onclick="clearFile()"
+                    class="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-50">
+                    <i class="fas fa-trash mr-2"></i>Effacer
+                </button>
+                <button id="processBtn" onclick="processDocument()" disabled
+                    class="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-bolt mr-2"></i>Traiter le document
+                </button>
+            </div>
         </div>
+
+        <!-- Processing -->
+        <div id="loadingSection" class="hidden bg-white rounded-xl shadow-sm p-8 text-center">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+            <p class="text-gray-600">Traitement en cours...</p>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsSection" class="hidden bg-white rounded-xl shadow-sm p-8">
+            <h3 class="text-2xl font-bold mb-6"><i class="fas fa-chart-bar mr-2 text-blue-600"></i>Résultats</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">Type de document</p>
+                    <p class="text-lg font-bold capitalize" id="resDocType"></p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">Confiance OCR</p>
+                    <p class="text-lg font-bold" id="resConfidence"></p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-500">Pages</p>
+                    <p class="text-lg font-bold" id="resPages"></p>
+                </div>
+            </div>
+
+            <div id="structuredDataContainer" class="mb-6 border rounded-lg p-4">
+                <h4 class="font-bold mb-3 text-blue-700"><i class="fas fa-database mr-2"></i>Données structurées</h4>
+                <div id="structuredData"></div>
+            </div>
+
+            <div class="border rounded-lg p-4">
+                <h4 class="font-bold mb-3 text-gray-700"><i class="fas fa-file-alt mr-2"></i>Texte extrait</h4>
+                <div class="bg-gray-50 p-4 rounded max-h-96 overflow-y-auto">
+                    <pre id="rawText" class="text-sm whitespace-pre-wrap"></pre>
+                </div>
+            </div>
+
+            <div class="mt-6 flex gap-4">
+                <button onclick="downloadResult('json')"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-download mr-2"></i>Télécharger JSON
+                </button>
+                <button onclick="downloadResult('csv')"
+                    class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-file-csv mr-2"></i>Télécharger CSV
+                </button>
+                <button onclick="resetUI()" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-redo mr-2"></i>Nouveau document
+                </button>
+            </div>
+        </div>
+
+        <div id="errorSection" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 text-red-800"></div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-12">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <p class="text-gray-400 text-sm">&copy; 2024 OCR Intelligent. Tous droits réservés.</p>
-            </div>
-        </div>
-    </footer>
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let authToken = localStorage.getItem('ocr_token');
+        let currentFile = null;
+        let currentProcessId = null;
 
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/upload.js"></script>
+        // Check auth on load
+        if (!authToken) {
+            window.location.href = 'login.html';
+        }
+
+        // Display username
+        document.getElementById('usernameDisplay').textContent = localStorage.getItem('ocr_user') || 'Utilisateur';
+
+        // Drag and drop
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
+
+        function handleFile(file) {
+            if (!file) return;
+
+            const maxSize = 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showError('Fichier trop volumineux (max 10MB)');
+                return;
+            }
+
+            currentFile = file;
+            document.getElementById('fileInfo').classList.remove('hidden');
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('processBtn').disabled = false;
+        }
+
+        function removeFile() {
+            currentFile = null;
+            fileInput.value = '';
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('processBtn').disabled = true;
+        }
+
+        function clearFile() {
+            removeFile();
+        }
+
+        async function processDocument() {
+            if (!currentFile) return;
+
+            document.getElementById('loadingSection').classList.remove('hidden');
+            document.getElementById('errorSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            formData.append('language', document.getElementById('languageSelect').value);
+
+            try {
+                const response = await fetch(`${API_URL}/ocr/extract`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Erreur de traitement');
+                }
+
+                const result = await response.json();
+                currentProcessId = result.process_id;
+                displayResults(result);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loadingSection').classList.add('hidden');
+            }
+        }
+
+        function displayResults(data) {
+            document.getElementById('resultsSection').classList.remove('hidden');
+
+            document.getElementById('resDocType').textContent = data.document_type || 'Inconnu';
+            document.getElementById('resConfidence').textContent = `${(data.average_confidence * 100).toFixed(1)}%`;
+            document.getElementById('resPages').textContent = data.total_pages;
+            document.getElementById('rawText').textContent = data.text || 'Aucun texte extrait';
+
+            // Display structured data
+            const structuredData = data.structured_data || {};
+            const container = document.getElementById('structuredData');
+            container.innerHTML = '';
+
+            if (Object.keys(structuredData).length === 0) {
+                container.innerHTML = '<p class="text-gray-400 italic">Aucune donnée structurée</p>';
+            } else {
+                Object.entries(structuredData).forEach(([key, value]) => {
+                    if (!value || (Array.isArray(value) && value.length === 0)) return;
+
+                    const row = document.createElement('div');
+                    row.className = 'flex border-b border-gray-200 py-2';
+                    row.innerHTML = `
+                        <div class="text-blue-600 font-medium w-1/3 capitalize">${key.replace(/_/g, ' ')}</div>
+                        <div class="w-2/3 text-gray-700">${Array.isArray(value) ? value.join(', ') : value}</div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+        }
+
+        async function downloadResult(format) {
+            if (!currentProcessId) return;
+
+            try {
+                const response = await fetch(`${API_URL}/ocr/download/${currentProcessId}/${format}`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ocr_result_${currentProcessId}.${format}`;
+                a.click();
+            } catch (error) {
+                showError('Erreur de téléchargement');
+            }
+        }
+
+        function resetUI() {
+            removeFile();
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('errorSection').classList.add('hidden');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorSection');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function logout() {
+            localStorage.removeItem('ocr_token');
+            localStorage.removeItem('ocr_user');
+            window.location.href = 'login.html';
+        }
+    </script>
 </body>
+
 </html>
