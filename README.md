@@ -148,32 +148,5 @@ Simulateur développé dans le cadre d'un projet académique d'émulation de mic
 "Développer pour comprendre, apprendre pour avancer"
 
 
-
----
-## 🚀 Installation Rapide
-
-### Prérequis
-- Python 3.9+
-- Tesseract OCR
-- Node.js (optionnel pour un serveur frontend plus avancé)
-
-### Installation sur macOS
-```bash
-# 1. Installer Tesseract
-brew install tesseract
-
-# 2. Cloner et configurer
-git clone <repository>
-cd ocr-intelligent
-
-# 3. Installer les dépendances Python
-cd backend
-pip install -r requirements.txt
-
-# 4. Démarrer le backend
-python start.py
-
-
 ## 📝 Licence
----
 Ce projet est sous licence MIT.
