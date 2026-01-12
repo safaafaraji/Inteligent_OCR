@@ -16,39 +16,39 @@ Nous adressons nos remerciements les plus sincères au **Pr. Dr. Hicham BENALLA*
 Ses connaissances approfondies et ses retours constructifs nous ont été d'une aide inestimable. Nous sommes très reconnaissants pour le temps qu'il nous a consacré et pour la qualité de son accompagnement pédagogique.
 
 
-## 📊 Architecture du Système
+## Architecture du Système
 
 Voici comment le système est structuré, du Frontend au Backend :
 
 ```mermaid
 graph TD
-    User([👤 Utilisateur]) -->|Upload Fichier| UI[🖥️ Frontend Glassmorphism]
-    UI -->|API Request| API[🚀 Backend FastAPI]
+    User([ Utilisateur]) -->|Upload Fichier| UI[Frontend Glassmorphism]
+    UI -->|API Request| API[ Backend FastAPI]
     
     subgraph Backend Services
         API -->|1. Détection Type| Router{Type de Doc?}
         
-        Router -->|Facture| InvoiceExt[💰 Extracteur Facture]
-        Router -->|CV| CVExt[👨‍💼 Extracteur CV]
+        Router -->|Facture| InvoiceExt[ Extracteur Facture]
+        Router -->|CV| CVExt[ Extracteur CV]
         Router -->|Autre| GenericExt[📄 Extracteur Générique]
         
-        API -->|2. Prétraitement| OpenCV[👁️ OpenCV Preprocessing]
-        OpenCV -->|Image Nettoyée| Tesseract[📖 Tesseract OCR]
+        API -->|2. Prétraitement| OpenCV[ OpenCV Preprocessing]
+        OpenCV -->|Image Nettoyée| Tesseract[ Tesseract OCR]
         
         subgraph File Handlers
-            PDFHandler[📑 PDF Handler]
-            PagesHandler[🍎 .pages Handler]
-            ImgHandler[🖼️ Image Handler]
+            PDFHandler[ PDF Handler]
+            PagesHandler[ .pages Handler]
+            ImgHandler[ Image Handler]
         end
     end
     
-    InvoiceExt & CVExt & GenericExt -->|Données Structurées| JSON[💾 JSON Result]
+    InvoiceExt & CVExt & GenericExt -->|Données Structurées| JSON[ JSON Result]
     JSON -->|Réponse| UI
 ```
 
 ---
 
-## 🔄 Flux de Traitement
+##  Flux de Traitement
 
 Le processus de traitement d'un document suit les étapes suivantes :
 
@@ -83,28 +83,28 @@ sequenceDiagram
 
 ---
 
-## ✨ Fonctionnalités Clés
+##  Fonctionnalités Clés
 
-### 1. 🎨 Interface Utilisateur Moderne
+### 1.  Interface Utilisateur Moderne
 - **Glassmorphism Design** : Une interface épurée et futuriste.
 - **Feedback Temps Réel** : Animations de chargement et visualisation instantanée des données.
 - **Export Facile** : Téléchargez vos données structurées en **JSON** ou **CSV**.
 
-### 2. 🧠 Intelligence Backend
+### 2.  Intelligence Backend
 - **Prétraitement d'Image (OpenCV)** : Amélioration automatique des images floues ou bruitées pour un OCR optimal.
 - **Reconnaissance de Type** : Détecte automatiquement si le document est un CV, une Facture, ou un devoir.
 - **Extraction d'Entités** :
   - **CV** : Nom, Email, Téléphone, Compétences, Expérience.
   - **Factures** : Numéro, Date, Montant Total, TVA.
 
-### 3. 🍎 Support Étendu
+### 3.  Support Étendu
 - Support natif des fichiers **Apple .pages**.
 - Support des PDFs et images (JPG, PNG, TIFF).
 - Support bilingue **Français 🇫🇷** et **Anglais 🇺🇸**.
 
 ---
 
-## 🚀 Installation et Démarrage
+##  Installation et Démarrage
 
 ### Prérequis
 - Python 3.8+
@@ -129,7 +129,7 @@ Ouvrez simplement le fichier `frontend/index.html` dans votre navigateur.
 
 ---
 
-## 🛠️ Stack Technique
+##  Stack Technique
 
 - **Backend** : FastAPI, Python, OpenCV, Pytesseract, TextUtil.
 - **Frontend** : HTML5, Vanilla JS, TailwindCSS (CDN).
@@ -148,5 +148,5 @@ Simulateur développé dans le cadre d'un projet académique d'émulation de mic
 "Développer pour comprendre, apprendre pour avancer"
 
 
-## 📝 Licence
+##  Licence
 Ce projet est sous licence MIT.
